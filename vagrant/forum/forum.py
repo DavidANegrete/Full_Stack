@@ -97,7 +97,7 @@ def Dispatcher(env, resp):
         status = '404 Not Found'
         headers = [('Content-type', 'text/plain')]
         resp(status, headers)    
-        return ['Not Found: ' + page]
+        return ['Not Fouggnd: ' + page]
 
 
 # Run this bad server only on localhost!
