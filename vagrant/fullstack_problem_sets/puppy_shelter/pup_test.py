@@ -20,9 +20,9 @@ shelterQuery = session.query(Shelter)
 
 #returns all the pups in ascending order A to Z
 def getPupsAtoZ():
-	allPups = pupQuery.order_by(Puppy.name.asc()).all()
-	for pups in allPups:
-		print pups.name
+	return pupQuery.order_by(Puppy.name.asc()).all()
+	#for pups in allPups:
+	#	print pups.name
 
 #querying pups younger than 6
 def getPupsYoungerThanSixMonths():

@@ -85,7 +85,7 @@ class webServerHandler(BaseHTTPRequestHandler):
                     self.wfile.write(output)
 
             if self.path.endswith("/restaurants"):
-                restaurants = session.query(Restaurant).all()
+                restaurants = session.query().all()
                 output = ""
                 # Objective 3 Step 1 - Create a Link to create a new menu item
                 output += "<a href = '/restaurants/new' > Make a New Restaurant Here </a></br></br>"
