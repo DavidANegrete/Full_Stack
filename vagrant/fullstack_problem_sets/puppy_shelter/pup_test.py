@@ -72,15 +72,19 @@ def getShelterOccupancy(_id):
 			return
 	return result
 
+def getShelterCap(_id):
+	return shelterQuery.order_by(Shelter.max_capacity).first()
+
 
 def vacantShelter():
     shelters = session.query(Shelter).all()
-    print "Here are the results:"
+#created dictionary//upacking shelter id + shelter name   
+    o_shelter = {}
     for shelter in shelters:
-        if(shelter.max_capacity >= getShelterOccupancy(shelter.id)):
-            print shelter.name + " has available space"
-        else:
-            print shelter.name + " is full! :("
+        if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
+            o_shelter.update({shelter.id:str(shelter.name)})
+
+    	return o_shelter
 
 #this function is used to set up the name of the adoptor
 def setAdoptor(name):
@@ -95,7 +99,7 @@ def setAdoptor(name):
 #Add a pup to find what shelter to put the pup in.
 
 def addPup(name, gender, dateOfBirth, picture, shelter_id, weight):
-	if(getShelterCapacity(shelter_id) >= getShelterOccupancy(shelter_id)):
+	if(getShelterCap(shelter_id) >= getShelterOccupancy(shelter_id)):
 		dob = datetime.strptime(dateOfBirth, '%b %d %Y')
 		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, picture = picture, shelter_id =shelter_id, weight = weight)
 		session.add(pupToAdd)

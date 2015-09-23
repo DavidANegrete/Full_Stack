@@ -20,21 +20,40 @@ session = DBSession()
 class webServerHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		try:
-			if self.path.endswith("/pups/new"):
-                self.send_response(200)
-                self.send_header('Content-type', 'text/html')
-                self.end_headers()
-                output = ""
-                output += "<html><body>"
-                output += "<h1>Add a new</h1>"
-                output += "<form method = 'POST' enctype='multipart/form-data' action = '/restaurants/new'>"
-                output += "<input name = 'newPupName' type = 'text' placeholder = 'Pups Name' > "
-                output += "<input type='radio' name='sex' value='male'> Male"
-                output += "<input type='radio' name='sex' value='female'> Female"
-                output += "<input type='submit' value='Add Pup'>"
-                output += "</form></html></body>"
-                self.wfile.write(output)
-                return					
+			if self.path.endswith("/pups/add"):
+				self.send_response(200)
+				self.send_header('Content-type','text/html')
+				self.end_headers()
+				output = ""
+				output += "<html><body>"
+				output += "<h1>Add a new pup<h1>"
+				output += "<form method='POST' enctype='multipart/form-data' action = '/pups/add'>"
+				output += "Name: <input name = 'newPupName' type ='text' placeholder = 'New Pup Name'><br>"
+				output += "Birthdate: <input type='date' name='birthday' ><br>"
+				output += "Weight: <input type='number' name='weight' min='1'><br>"
+				#select element is was used to get a single name val i was getting an error from hell. 
+				output += "<select name='gender'>"
+				output += "<option value='male'>Male</option>"
+				output += "<option value='female'>Female</option>"
+				output += "</select>"
+
+				#import from from pup_test checks to see what shelters are vacant
+				button_state = 'disabled'
+				shelters = vacantShelter()
+				if shelters:
+					output += "<p>Here are the available shelters</p>"
+					output += "<select name='shelter'>"
+					for shelter in shelters:
+						output += "<option value=' "+ shelters[shelter] + "' value=+ str(shelter)'" + "'>"+  +"<option>"
+						button_state = 'enabled'
+					if (button_state == 'disabled'):
+						output += "<p>All Shelters Are full! Please find a new shelter.</p>"
+					output += "</select>"
+				output += "<input type = 'submit' value = 'Add'"+ button_state + ">"
+				output += "</form>"
+				output += "</html></body>"
+				self.wfile.write(output)
+				return
 
 
 			if self.path.endswith("/pups"):
@@ -99,13 +118,32 @@ class webServerHandler(BaseHTTPRequestHandler):
 			self.send_error(404, "File not found %s" % self.path)
 
 	def do_post(self):
-		if self.path.endswith('/pups/add'):
-            ctype, pdict = cgi.parse_header(
-            	self.headers.getheader('content-type'))
-                if ctype == 'multipart/form-data':
-                    fields = cgi.parse_multipart(self.rfile, pdict)
-                    messagecontent = fields.get('newRestaurantName')
-                    restaurantIDPath = self.path.split("/")[2]			
+		try:
+			if self.path.endswith("/pups/add"):
+				ctype, pdict = cgi.parse_header(
+					self.headers.getheader('content-type'))
+				if ctype == 'multipart/form-data':
+					fields = cgi.parse_multipart(self.rfile, pdict)
+					form = fields.get('newPupName','birthday', 'weight', 'gender', 'shelter')
+				
+
+				newPup = Puppy(name=form[0], dateOfBirth = form[1], weight=form[1], gender=form[2], shelter=form[3])
+				session.add(newPup)
+				session.commit()
+
+				self.send_response(301)
+				self.send_header('Content-type', 'text/html')
+				self.send_header('Location','/pups')
+				self.end_headers()
+
+
+
+
+
+		except:
+			pass
+
+
 
 
 
