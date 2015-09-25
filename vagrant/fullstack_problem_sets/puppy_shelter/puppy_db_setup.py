@@ -9,7 +9,8 @@
 #2. class - used to represent the data in python
 #3. table - represent the table in the db
 #4. mapper - reps the class the represents the columns with the class that represents the data
-
+import os
+import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, Date, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship

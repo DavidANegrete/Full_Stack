@@ -1,0 +1,93 @@
+<html>
+<head>
+	<title>Restaurants</title>
+	
+</head>
+<body>
+	<div>
+		<h1>Here you can find a new home for a pup or a rescue one<h1>
+	</div>
+	
+	<div id = 'search'>
+		<div>
+			<h3>Use the following form to search for a pup located in one of the many shelters in our city.</h3>
+			<form action = '' method= 'post'>
+				<fieldset>
+					<legend>Pups available</legend>
+					<p>
+      					<input type='text' name='name' id='name'/>
+      					<label for="name">Pup name*</label>
+    				</p>
+    				<p>
+    					<select name='gender'>
+							<option value='male'>Male</option>
+							<option value='female'>Female</option>
+						</select>
+						
+    				</p>
+    				<p>
+    					<!--age will not be used to pull form elements   -->
+    					<select name='age-option'>
+							<option value='6'>Six months or younger</option>
+							<option value='7'>6 months to 3 years</option>
+							<option value='8'>3 to 6 years</option>
+							<option value='9'>6 years and above</option>
+						</select>
+						
+    				</p>
+    				
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	
+	<div id = 'rehome'>
+		<div>
+			<h3>Find a shelter for a pup</h3>
+		</div>
+		<div id = 'add-shelter-form'>
+			<form action = '' method= 'post'>
+				<fieldset>
+					<legend>Add to a shelter</legend>
+					<p>
+      					<input type='text' name='name' id='name'/>
+      					<label for='name'>Pup name*</label>
+    				</p>
+    				<p>
+    					<select name='gender' id='gender' >
+							<option value='male'>Male</option>
+							<option value='female'>Female</option>
+						</select>
+						<lable for='gender'>Sex</lable>
+    				</p>
+    				<p>
+      					<input type='date' name='dateOfBirth' id='dateOfBirth'/>
+      					<label for='dateOfBirth'>Birth Day</label>
+    				</p>
+    				<p>
+      					<input type='text' name='picture' id='picture'/>
+      					<label for='picture'>Picture</label>
+    				</p>
+    				<p>
+      					<input type='text' name='weight' id='weight'/>
+      					<label for='weight'>Weight</label>
+    				</p>
+    				<legend>Here are the available shelters</legend>
+    			
+    				<select name='shelter'>
+    					<option value= '1' >Option 1<options>
+    					<option value= '2' >Option 2<options>
+    				</select>
+    				<p>
+						<input type = 'submit' value = 'Add to a Shelter'>
+    				</p>
+				</fieldset>
+			</form>
+		</div>
+
+
+	</div>
+
+
+</body>
+</html>
