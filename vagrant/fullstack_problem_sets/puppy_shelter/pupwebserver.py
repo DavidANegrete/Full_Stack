@@ -27,7 +27,7 @@ shelterQuery = session.query(Shelter)
 
 @app.route('/pups/', methods=['GET', 'POST'])
 def pupsIndex():
-	pups = pupQuery.all()
+	
 	return render_template('pupshome.html', pups=pups)
 
 

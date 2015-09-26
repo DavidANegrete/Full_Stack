@@ -3,14 +3,27 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
 from restaurant_methods import *
-
 app = Flask(__name__)
+
+#New IMPORTS OF FOR OATH:
+from flask import session as login_session
+  #Will use this to create a psuedo random string
+import random, string
 
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+#Creating a state token to preven request forgery
+#Store it in the session for later validation
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
+    return "The current sessions state is %s " %login_session['state']
+
 
 
 @app.route('/restaurants/')
