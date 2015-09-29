@@ -24,14 +24,22 @@ shelterQuery = session.query(Shelter)
 
 
 
-
+@app.route('/')
 @app.route('/pups/', methods=['GET', 'POST'])
-def pupsIndex():
-	
-	return render_template('pupshome.html', pups=pups)
+def pups():
+	return render_template('pupshome.html')
 
+@app.route('/pups/search/')
+def pupsSearch():
+	return render_template('pupssearch.html')
 
-	
+@app.route('/pups/adopt/')
+def pupsAdopt():
+	return render_template('pupsadopt.html')
+
+@app.route('/pups/add/')
+def pupsAdd():
+	return render_template('pupsadd.html')
 
 
 
