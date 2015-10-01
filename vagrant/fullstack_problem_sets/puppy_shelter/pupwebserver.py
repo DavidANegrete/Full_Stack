@@ -22,24 +22,33 @@ pupQuery = session.query(Puppy)
 
 shelterQuery = session.query(Shelter)
 
+@app.route('/pups/login/')
+def login():
+	return render_template('login.html')
 
 
 @app.route('/')
-@app.route('/pups/', methods=['GET', 'POST'])
+@app.route('/pups/')
 def pups():
 	return render_template('pupshome.html')
 
-@app.route('/pups/search/')
+#search for a pup 
+@app.route('/pups/search/', methods=['GET', 'POST'])
 def pupsSearch():
-	return render_template('pupssearch.html')
+	shelters = shelterQuery.all()
+	
+	if request.method == 'POST':
+		
+		return render_template('searchresults.html')
+	return render_template('pupssearch.html', shelters=shelters)
 
 @app.route('/pups/adopt/')
 def pupsAdopt():
 	return render_template('pupsadopt.html')
 
-@app.route('/pups/add/')
-def pupsAdd():
-	return render_template('pupsadd.html')
+@app.route('/pups/rehome/')
+def pupsRehome():
+	return render_template('pupsrehome.html')
 
 
 

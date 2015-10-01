@@ -18,22 +18,22 @@
   <div class="jumbotron">
     <h1>Find a pup or find a shelter for one.</h1>
     <p class="lead">You may be searching for a new friend or maybe you need to find a new home for one. On this site you can adopt a pet or find a new home for one throgh one of the many shelter in our city.</p>
-    <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+    
   </div>
   <div class="row">
     <div class="col-lg-4">
       <h2>Search for a Missing Pet</h2>
       <p>Your best bud may have ran off, don't worry with a few details you can search for your lost compnanion from one of the city's many shelters.</p>
-      <p><a class="btn btn-primary" href="#" role="button">Search the Shelters &raquo;</a></p>
+      <p><a class="btn btn-primary" href="{{url_for('pupsSearch')}}" role="button">Search the Shelters &raquo;</a></p>
     </div>
     <div class="col-lg-4">
       <h2>Adopt</h2>
       <p>There are always many pets that need new loving families. Use the link below to search our city's shelters for a pet that matches up with your needs.</p>
-      <p><a class="btn btn-primary" href="#" role="button">Adopt a Pet &raquo;</a></p>
+      <p><a class="btn btn-primary" href="#" role="{{url_for('pupsAdopt')}}">Adopt a Pet &raquo;</a></p> 
     </div>
     <div class="col-lg-4">
      <h2>Rehome</h2>
      <p>Things change and familes get broken up sometimes, if you are looking to rehome a pup you can do so from here.</>
-     <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+     <p><a class="btn btn-primary" href="{{url_for('pupsRehome')}}" role="button">View details &raquo;</a></p> 
     </div>
   {% endblock %}

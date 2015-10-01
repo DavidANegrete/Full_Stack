@@ -33,10 +33,10 @@
 			{% block nav %}
 				<nav>
 					<ul class="nav nav-justified">
-						<li {% if page == 'home' %} class="active" {% endif %}><a href="#">Home</a></li>
+						<li {% if page == 'home' %} class="active" {% endif %}><a href="{{url_for('pups')}}">Home</a></li>
             			
-            			<li {% if page == 'search' %} class="active" {% endif %}><a href="#">Search</a></li>
-            			<li {% if page == 'rehome' %} class="active" {% endif %}><a href="#">Rehome</a></li>
+            			<li {% if page == 'search' %} class="active" {% endif %}><a href="{{url_for('pupsSearch')}}">Search</a></li>
+            			<li {% if page == 'rehome' %} class="active" {% endif %}><a href="{{url_for('pupsRehome')}}">Rehome</a></li>
           			</ul>
         		</nav>
         	{% endblock %}	
