@@ -37,10 +37,18 @@ def pups():
 def pupsSearch():
 	shelters = shelterQuery.all()
 	
+	
 	if request.method == 'POST':
+		name = request.form['name']
 		
-		return render_template('searchresults.html')
+		
+		return redirect(url_for('searchResults', name = name ))
 	return render_template('pupssearch.html', shelters=shelters)
+
+@app.route('/pups/search/results/<name>', methods=['GET', 'POST'])
+def searchResults(name):
+	return render_template('searchresults.html', name=name)
+
 
 @app.route('/pups/adopt/')
 def pupsAdopt():

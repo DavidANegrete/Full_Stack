@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from puppy_db_setup import Base, Shelter, Puppy, Adoptor, AdoptorAndPuppy
-from datetime import datetime
+import datetime
 #specifies what db will be used
 engine = create_engine('sqlite:///puppyshelter.db')
 
@@ -29,14 +29,37 @@ def getPupsAtoZ():
 	#	print pups.name
 
 #querying pups younger than 6
-def getPupsYoungerThanSixMonths():
+def getBaby(var):
 	#Date and time being used to do find out the yougest of pups compared to the time know
 	sixMonthsfromNow = datetime.date.today() - datetime.timedelta(6 *365/12)
-	younPups = pupQuery.filter(Puppy.dateOfBirth > sixMonthsfromNow).order_by(Puppy.dateOfBirth).all()
+	youngPups = pupQuery.filter(Puppy.dateOfBirth > sixMonthsfromNow).order_by(Puppy.dateOfBirth).all()
 	for pup in youngPups:
 		print pup.name
 		print pup.dateOfBirth
 		print "_____________________________"
+
+def getAgeRange(var):
+	dateRange ={}
+	if var == '5':
+		dateRange={}
+	elif var == '6':
+		youngerThanSixMonths = datetime.date.today() - datetime.timedelta(6 *365/12)
+		today = datetime.date.today()
+		dateRange = {youngerThanSixMonths:today}
+	elif var == '7':
+		youngerThanSixMonths = datetime.date.today() - datetime.timedelta(6 *365/12)
+		threeYears = datetime.date.today() - datetime.timedelta(36 *365/12)
+		dateRange = {youngerThanSixMonths:threeYears}
+	elif var == '8':
+		threeYears = datetime.date.today() - datetime.timedelta(36 *365/12)
+		sixYears = datetime.date.today() - datetime.timedelta(72 *365/12)
+		dateRange = {threeYears:sixYears}
+	else:
+		sixYears = datetime.date.today() - datetime.timedelta(72 *365/12)
+		ancient = datetime.date.today() - datetime.timedelta(300 *365/12)
+		dateRange = {sixYears:ancient}
+	return dateRange
+
 
 def getPupsByWeight():
 	pupWeight = pupQuery.filter(Puppy.weight).order_by(Puppy.dateOfBirth).all()
