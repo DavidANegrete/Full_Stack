@@ -36,18 +36,26 @@ def pups():
 @app.route('/pups/search/', methods=['GET', 'POST'])
 def pupsSearch():
 	shelters = shelterQuery.all()
-	
-	
 	if request.method == 'POST':
-		name = request.form['name']
-		
-		
-		return redirect(url_for('searchResults', name = name ))
+		if request.form['name']:
+			name = request.form['name']
+		else:
+			name = 'any'
+		if request.form['gender']:
+			gender = request.form['gender']
+		if request.form['age-option']:
+			age_option = request.form['age-option']
+		if request.form['shelter_id']:
+			shelter_id = request.form['shelter_id'] 
+
+		return redirect(url_for('searchResults', name = name, gender=gender,
+							 age_option=age_option, shelter_id=shelter_id ))
 	return render_template('pupssearch.html', shelters=shelters)
 
-@app.route('/pups/search/results/<name>', methods=['GET', 'POST'])
-def searchResults(name):
-	return render_template('searchresults.html', name=name)
+@app.route('/pups/search/results/<name>/<gender>/<age_option>/<shelter_id>', methods=['GET', 'POST'])
+def searchResults(name, gender, age_option, shelter_id):
+	return render_template('searchresults.html', name=name, gender=gender,
+	age_option=age_option, shelter_id=shelter_id)
 
 
 @app.route('/pups/adopt/')
