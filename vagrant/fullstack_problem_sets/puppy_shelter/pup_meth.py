@@ -37,11 +37,13 @@ def getBaby(var):
 		print pup.name
 		print pup.dateOfBirth
 		print "_____________________________"
-
+#takes a form date value and returns a dictionary that includs a date range.
 def getAgeRange(var):
 	dateRange ={}
 	if var == '5':
-		dateRange={}
+		today = datetime.date.today()
+		ancient = datetime.date.today() - datetime.timedelta(900 *365/12)
+		dateRange={ancient:today}
 	elif var == '6':
 		youngerThanSixMonths = datetime.date.today() - datetime.timedelta(6 *365/12)
 		today = datetime.date.today()
@@ -49,17 +51,18 @@ def getAgeRange(var):
 	elif var == '7':
 		youngerThanSixMonths = datetime.date.today() - datetime.timedelta(6 *365/12)
 		threeYears = datetime.date.today() - datetime.timedelta(36 *365/12)
-		dateRange = {youngerThanSixMonths:threeYears}
+		dateRange = {threeYears:youngerThanSixMonths}
 	elif var == '8':
 		threeYears = datetime.date.today() - datetime.timedelta(36 *365/12)
 		sixYears = datetime.date.today() - datetime.timedelta(72 *365/12)
-		dateRange = {threeYears:sixYears}
+		dateRange = {sixYears:threeYears}
 	else:
 		sixYears = datetime.date.today() - datetime.timedelta(72 *365/12)
 		ancient = datetime.date.today() - datetime.timedelta(300 *365/12)
-		dateRange = {sixYears:ancient}
+		dateRange = {ancient:sixYears}
 	return dateRange
 
+#method returns a string value when an input is entered.
 
 def getPupsByWeight():
 	pupWeight = pupQuery.filter(Puppy.weight).order_by(Puppy.dateOfBirth).all()

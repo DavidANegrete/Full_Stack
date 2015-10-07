@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 
 # import CRUD Operations from Lesson 1
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, and_
+from sqlalchemy.orm import sessionmaker  
 from puppy_db_setup import Base, Shelter, Puppy, Adoptor, AdoptorAndPuppy
 from pup_meth import * 
+import logging
 # Create session and connect to DB
 
 
@@ -31,35 +32,75 @@ def login():
 @app.route('/pups/')
 def pups():
 	return render_template('pupshome.html')
+@app.route('/pups/test')
+def pupsTest():
+	return render_template('pupttest.html')
 
-#search for a pup 
+
+#search for a pup  
 @app.route('/pups/search/', methods=['GET', 'POST'])
 def pupsSearch():
-	shelters = shelterQuery.all()
-	if request.method == 'POST':
-		if request.form['name']:
-			name = request.form['name']
+    
+    if request.method == 'POST':
+
+    	startDate= ''
+    	endDate= ''  
+    	ageRange = {}
+        kwargs = { x:request.form[x] for x in request.form if request.form[x] and request.form[x] != 'default' }
+        
+        #Method from pup_meth getAgeRange(var): take a numeric variable and returns a coresponding age range in the form of a dictionay. 
+        ageRange=getAgeRange(kwargs['dateOfBirth'])
+        
+        #startDate is the closest to the current date on any search.
+        for key in ageRange:
+        	endDate = key
+        	startDate = ageRange[key]
+		
+		#puppy_list is a query object with all the puppies in the db. 
+		puppy_list = session.query(Puppy, Shelter).filter(Puppy.shelter_id == Shelter.id)
+		holder = kwargs['name']
+		#Checking if the value from input='name' is the same or less than 3 and return the puppy_list 
+		# or the search continues
+		if len(holder) >= 3 and holder == 'Name':
+			puppy_list=puppy_list
 		else:
-			name = 'any'
-		if request.form['gender']:
-			gender = request.form['gender']
-		if request.form['age-option']:
-			age_option = request.form['age-option']
-		if request.form['shelter_id']:
-			shelter_id = request.form['shelter_id'] 
+			name = kwargs['name'].strip().title()
+			if name:
+				    puppy_list = puppy_list.filter(Puppy.name == name)
 
-		return redirect(url_for('searchResults', name = name, gender=gender,
-							 age_option=age_option, shelter_id=shelter_id ))
-	return render_template('pupssearch.html', shelters=shelters)
+        #block to check the gender selected	
+        if kwargs['gender'] == 'either':
+        	puppy_list = puppy_list
+        else:
+        	if kwargs['gender'] == 'female':
+        		puppy_list = puppy_list.filter(Puppy.gender == 'female')
+        	else:
+        		puppy_list = puppy_list.filter(Puppy.gender == 'male')
+        #start and end are called at the start of the block and use a method from pup_meth to get the range.
+        if kwargs['dateOfBirth'] == 'any':
+        	puppy_list = puppy_list
+        else:
+        	puppy_list = puppy_list.filter(and_(Puppy.dateOfBirth <= startDate, Puppy.dateOfBirth >= endDate))
+        #block of code used to pick the shelter from the shelters in the the db
+        if kwargs['shelter_id'] == 'all':
+        	puppy_list = puppy_list
+        else:
+        	sh_id = kwargs['shelter_id']
+        	puppy_list = puppy_list.filter(Puppy.shelter_id == Shelter.id).filter(Puppy.shelter_id == int(sh_id)).all()
+        # rendering new page with results.
+        return render_template('searchresults.html', puppy_list=puppy_list)
 
-@app.route('/pups/search/results/<name>/<gender>/<age_option>/<shelter_id>', methods=['GET', 'POST'])
-def searchResults(name, gender, age_option, shelter_id):
-	return render_template('searchresults.html', name=name, gender=gender,
-	age_option=age_option, shelter_id=shelter_id)
+    # N.b. I moved this statement as it is only useful for GET requests:
+    shelters = shelterQuery.all()
+    return render_template('pupssearch.html', shelters=shelters)
+	
+
+@app.route('/pups/adopt/<int:pup_id>/<int:shelter_id>', methods=['GET', 'POST'])
+def pupsAdopt(pup_id, shelter_id):
+	if request.method == 'POST':
+		return  render_template('pups')
 
 
-@app.route('/pups/adopt/')
-def pupsAdopt():
 	return render_template('pupsadopt.html')
 
 @app.route('/pups/rehome/')

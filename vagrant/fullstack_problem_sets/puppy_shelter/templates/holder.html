@@ -1,97 +1,16 @@
-<html>
-<head>
-	<title>Pup City</title>
-	
-</head>
-<body>
-	<div>
-		<h1 id= 'main-header'>Use this page to find a new pup or rescue one from a shelter</h1>
-	</div>
-	
-	<div id = 'search'>
-		<div>
-			<h3>Use the following form to search for a pup being housed in various shelters in our city.</h3>
-			<form action = '' method= 'post'>
-				<fieldset>
-					<legend>Pups available</legend>
-					<p>
-      					<input type='text' name='name' id='name' placeholder='Pups Name'/>
-      					<label for="name">Pup name*</label>
-    				</p>
-    				<p>
-    					<select name='gender'>
-    						<option>Male or Female</option>
-							<option value='male'>Male</option>
-							<option value='female'>Female</option>
-						</select>
-						<label for='gender'>Male or Female</label>
-    				</p>
-    				<p>
-    					<!--age will not be used to pull form elements   -->
-    					<select name='age-option'>
-    						<option >Select an Age</option>
-							<option value='6'>Six months or younger</option>
-							<option value='7'>6 months to 3 years</option>
-							<option value='8'>3 to 6 years</option>
-							<option value='9'>6 years and above</option>
-						</select>
-						<label for='age-option'>Age</label>
-    				</p>
-    				<p><small> *The name search option is an option for those that have lost a pet and have registered the pup with an RFID.</small></p>
-				</fieldset>
-				<p><small> *The name is optional</small></p>
-			</form>
-		</div>
-	</div>
-	
-	<div id = 'rehome'>
-		<div>
-			<h3>Find a shelter for a pup</h3>
-		</div>
-		<div id = 'add-shelter-form'>
-			<form action = '' method= 'post'>
-				<fieldset>
-					<legend>Add to a shelter</legend>
-					<p>
-      					<input type='text' name='name' id='name'/>
-      					<label for='name'>Pup name*</label>
-    				</p>
-    				<p>
-    					<select name='gender' id='gender' >
-    						<option>Male or Female</option>
-							<option value='male'>Male</option>
-							<option value='female'>Female</option>
-						</select>
-						<lable for='gender'>Sex</lable>
-    				</p>
-    				<p>
-      					<input type='text' name='dateOfBirth' id='dateOfBirth'/>
-      					<label for='dateOfBirth'>Birth Day</label>
-    				</p>
-    				<p>
-      					<input type='text' name='picture' id='picture'/>
-      					<label for='picture'>Picture</label>
-    				</p>
-    				<p>
-      					<input type='text' name='weight' id='weight'/>
-      					<label for='weight'>Weight</label>
-    				</p>
-    				<legend>Here are the available shelters</legend>
-    				
-    				<select name='shelter'>
-    					<option value= '1' >Option 1<options>
-    					<option value= '2' >Option 2<options>
-    				</select>
-    				<p>
-						<input type = 'submit' value = 'Add to a Shelter'>
-    				</p>
-				</fieldset>
-			</form>
-		</div>
+shelters = shelterQuery.all()
+	if request.method == 'POST':
+		if request.form['name']:
+			name = request.form['name']
+		else:
+			name = 'any'
+		if request.form['gender']:
+			gender = request.form['gender']
+		if request.form['age-option']:
+			age_option = request.form['age-option']
+		if request.form['shelter_id']:
+			shelter_id = request.form['shelter_id'] 
 
-
-	</div>
-
-
-</body>
-</html>
+		return redirect(url_for('searchResults', name = name, gender=gender,
+							 age_option=age_option, shelter_id=shelter_id ))
+	return render_template('pupssearch.html', shelter
