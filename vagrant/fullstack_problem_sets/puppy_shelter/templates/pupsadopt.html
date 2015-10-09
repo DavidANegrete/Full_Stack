@@ -41,13 +41,22 @@
 
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
+
       <img src="/static/images/adopty.jpg" alt="">
       <div class="caption">
         
-        <h3>Max</h3>
-        <p>By pressing the 'I commit!
-          ' button you are commiting to provide an amazing home for {{ name }}. </p>
-        <p><a href="{{url_for('pupsSearch') }}" class="btn btn-primary" role="button"> <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Go Back (Cancel) </a> <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> I commit! </a></p>
+        <h3>{{ pup.name }}</h3>
+        <p>By pressing the 'I commit!' button you are commiting to provide an amazing home for {{ pup.name }}. That is being cared for at {{ shelter.name }}. </p>
+        
+          
+          <form action = "{{url_for('pupsAdopt', pup_id = pup.id, shelter_id = shelter.id)}}" method= 'post'>
+            <p><button onclick="goBack()" class="btn btn-primary" role="button" name='back'> <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Go Back (Cancel) </button>
+            
+              <button type='submit' class="btn btn-primary" role="button" name='adopt'><span class="glyphicon glyphicon glyphicon-heart" aria-hidden="true"></span> I Commit! </button></p>
+
+            
+            
+          </form>
       </div>
     </div>
   </div>
@@ -56,6 +65,11 @@
   </div>
 </div>
 
-
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
 
   {% endblock %}
+  

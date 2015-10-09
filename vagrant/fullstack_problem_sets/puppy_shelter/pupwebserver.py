@@ -91,21 +91,43 @@ def pupsSearch():
         return render_template('searchresults.html', puppy_list=puppy_list)
 
     # N.b. I moved this statement as it is only useful for GET requests:
-    shelters = shelterQuery.all()
+    shelters = session.query(Shelter)
     return render_template('pupssearch.html', shelters=shelters)
 	
 
 @app.route('/pups/adopt/<int:pup_id>/<int:shelter_id>', methods=['GET', 'POST'])
 def pupsAdopt(pup_id, shelter_id):
 	if request.method == 'POST':
-		return  render_template('pups')
+
+		return  render_template('pupsnewparent.html')
 
 
-	return render_template('pupsadopt.html')
+	pup = session.query(Puppy).filter(Puppy.id==pup_id, shelter_id==shelter_id).one()
+	shelter = session.query(Shelter).filter(Shelter.id==shelter_id).one()
+	return render_template('pupsadopt.html',pup=pup, shelter=shelter)
 
-@app.route('/pups/rehome/')
+@app.route('/pups/rehome/', methods=['GET', 'POST'])
 def pupsRehome():
-	return render_template('pupsrehome.html')
+	if request.method == 'POST':
+		kwargs = { x:request.form[x] for x in request.form if request.form[x] and request.form[x] != 'default' }
+		name = kwargs['name']
+		gender = kwargs['gender']
+		dob = kwargs['dateOfBirth']
+		weight = kwargs['weight']
+		shelter_id = kwargs['shelter']
+		print name + gender + dob + weight + shelter_id
+		#addPup(name, gender, dob, 'none', shelter_id, weight)
+		
+		return render_template('pupshome.html')
+	
+	
+	
+
+	#vacantShelter(): 
+	#returns a dictionary object that includes the id and the name 
+	# of shelters with space available.
+	shelters = vacantShelter()
+	return render_template('pupsrehome.html', shelters=shelters)
 
 
 

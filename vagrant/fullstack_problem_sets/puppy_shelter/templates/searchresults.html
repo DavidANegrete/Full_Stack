@@ -20,7 +20,7 @@
       <h5>Gender:</h5><p class="list-group-item-text"> {{ pup.gender }}</p>
       <h5>Age:</h5><p class="list-group-item-text"> {{ pup.dateOfBirth }}</p>
       <h5>Shelter:</h5> <p class="list-group-item-text">{{ shel.name }}</p><br>
-       <p><a class="btn btn-primary" href="{{url_for('pupsAdopt', shelter_id=shel.id, pup_id=pup.id, pup_name = pup.name, shel_name = shel.name, puppy_list=puppy_list) }}" role="button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Adopt</a></p> 
+       <p><a class="btn btn-primary" href="{{url_for('pupsAdopt', shelter_id=shel.id, pup_id=pup.id, pup_name = pup.name, shel_name = shel.name) }}" role="button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Adopt</a></p> 
     </div>
     {% endfor %}
 </div>

@@ -103,18 +103,23 @@ def getShelterOccupancy(_id):
 	return result
 
 def getShelterCap(_id):
-	return shelterQuery.order_by(Shelter.max_capacity).first()
+	result = session.query(Shelter).filter(Shelter.id == _id).one()
+	if not result: 
+			print "So shelter found"
+			return
+	return result.max_capacity
 
 
+#this method use a dictionary to return the id and name of shelter with vacancies. 
 def vacantShelter():
-    shelters = session.query(Shelter).all()
-#created dictionary//upacking shelter id + shelter name   
-    o_shelter = {}
+    shelters = session.query(Shelter)
+    shelter_id = {}
     for shelter in shelters:
-        if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
-            o_shelter.update({shelter.id:str(shelter.name)})
+          if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
+            shelter_id.update({shelter.id:shelter.name})
+    
+    return shelter_id
 
-    	return o_shelter
 
 #this function is used to set up the name of the adoptor
 def setAdoptor(name):
