@@ -44,7 +44,7 @@ function signInCallback(authResult) {
     $.ajax({
       type: 'POST',
       url: '/gconnect?state={{STATE}}',
-      //Keeps JQuery from processing data to a string.
+      //Keeps JQuery from processing response into a string data to a string.
       processData: false,
       data: authResult['code'],
       contentType: 'application/octet-stream; charset=utf-8',

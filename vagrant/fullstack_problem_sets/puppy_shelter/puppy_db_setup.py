@@ -18,6 +18,14 @@ from sqlalchemy import create_engine
  
 Base = declarative_base()
 
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+    picture = Column(String(250))
+
 class Shelter(Base):
     __tablename__ = 'shelter'
     id = Column(Integer, primary_key = True)
@@ -30,6 +38,16 @@ class Shelter(Base):
     max_capacity = Column(Integer(10))
     current_capacity = Column(Integer(10))
 
+    @property
+    def serialize(self):
+        return {     
+        'id': self.id,
+        'name': self.name,
+        'city': self.city,
+        'state': self.state,
+        }
+
+
 
 class Puppy(Base):
     __tablename__ = 'puppy'
@@ -39,25 +57,30 @@ class Puppy(Base):
     dateOfBirth = Column(Date)
     picture = Column(String)
     shelter_id = Column(Integer, ForeignKey('shelter.id'))
+    entered_by = Column(Integer, ForeignKey('user.id'))
     shelter = relationship(Shelter)
     weight = Column(Numeric(10))
 
-#Table for keeping the name of the person or family adopting
-class Adoptor(Base):
-    __tablename__ = 'adoptor'
-    id = Column(Integer, primary_key = True)
-    name = Column(String(80))
+    @property
+    def serialize(self):
+        return {
+        'id': self.id,
+        'name': self.name,
+        'gender': self.gender,
+        'dateOfBirth': self.dateOfBirth,
 
-#A one to many table to show the relaationship between an adoptor and a pup
-class AdoptorAndPuppy(Base):
-    __tablename__ = 'adoptor_and_puppy'
-    adoptorId = Column(Integer, ForeignKey(Adoptor.id), primary_key = True)
+        }
+
+#A one to many table to show the relationship between an users and pups when a pup is adopted
+class UserAndPuppy(Base):
+    __tablename__ = 'user_and_puppy'
+    userId = Column(Integer, ForeignKey(User.id), primary_key = True)
     puppyId = Column(Integer, ForeignKey(Puppy.id), primary_key = True)
     puppy = relationship(Puppy)
-    adoptor = relationship(Adoptor)
+    user = relationship(User)
 
 
-engine = create_engine('sqlite:///puppyshelter.db')
+engine = create_engine('sqlite:///puppyshelterwithusers.db')
  
 
 Base.metadata.create_all(engine)

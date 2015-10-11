@@ -4,10 +4,10 @@ app = Flask(__name__)
 
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker  
-from puppy_db_setup import Base, Shelter, Puppy, Adoptor, AdoptorAndPuppy
+from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy
 
 import random, string
-from pup_meth import * 
+from pup_methods import * 
 
 # IMPORTS FOR THIS STEP
 from oauth2client.client import flow_from_clientsecrets
@@ -19,11 +19,12 @@ import requests
 
 import logging
 
+#getting the client id to cross check authentication
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Pups in the City"
 
-engine = create_engine('sqlite:///puppyshelter.db')
+engine = create_engine('sqlite:///puppyshelterwithusers.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -229,9 +230,11 @@ def pupsSearch():
 
 @app.route('/pups/adopt/<int:pup_id>/<int:shelter_id>', methods=['GET', 'POST'])
 def pupsAdopt(pup_id, shelter_id):
-	if request.method == 'POST':
-
-		return  render_template('pupsnewparent.html')
+	#checking to see if a user is logged on or not.  
+    if request.method == 'POST':
+        if 'username' not in loggin_session:
+            return redirect('/login')
+	return  render_template('pupsnewparent.html')
 
 
 	pup = session.query(Puppy).filter(Puppy.id==pup_id, shelter_id==shelter_id).one()

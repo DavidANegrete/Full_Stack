@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from puppy_db_setup import Base, Shelter, Puppy, Adoptor, AdoptorAndPuppy
+from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy
 from datetime import datetime as date_time
 import datetime
 #specifies what db will be used
-engine = create_engine('sqlite:///puppyshelter.db')
+engine = create_engine('sqlite:///puppyshelterwithusers.db')
 
 Base.metadata.bind = engine
 
@@ -18,27 +18,15 @@ pupQuery = session.query(Puppy)
 
 shelterQuery = session.query(Shelter)
 
-
 def getPupsAll():
 	return pupQuery.all()
 
-
-#returns all the pups in ascending order A to Z
-def getPupsAtoZ():
-	return pupQuery.order_by(Puppy.name.asc()).all()
-	#for pups in allPups:
-	#	print pups.name
-
-#querying pups younger than 6
-def getBaby(var):
-	#Date and time being used to do find out the yougest of pups compared to the time know
+#querying the db for pups younger than 6 months.
+def getPuppies():
 	sixMonthsfromNow = datetime.date.today() - datetime.timedelta(6 *365/12)
-	youngPups = pupQuery.filter(Puppy.dateOfBirth > sixMonthsfromNow).order_by(Puppy.dateOfBirth).all()
-	for pup in youngPups:
-		print pup.name
-		print pup.dateOfBirth
-		print "_____________________________"
-#takes a form date value and returns a dictionary that includs a date range.
+	return pupQuery.filter(Puppy.dateOfBirth > sixMonthsfromNow).order_by(Puppy.dateOfBirth).all()
+
+#takes a date from a date from the possible choices to pick and returns a dictionary (YYYY-DD-MM:YYYY-DD-MM).
 def getAgeRange(var):
 	dateRange ={}
 	if var == '5':
@@ -64,86 +52,61 @@ def getAgeRange(var):
 	return dateRange
 
 #method returns a string value when an input is entered.
-
 def getPupsByWeight():
-	pupWeight = pupQuery.filter(Puppy.weight).order_by(Puppy.dateOfBirth).all()
-	for pup in pupWeight:
-		print pup.name
-		print pup.weight
-		print "______________________________"
+	return pupQuery.filter(Puppy.weight).order_by(Puppy.dateOfBirth).all()
 
+#the method returns all the pups in the db sorted by shelter_id
 def getPupsGroupByShelter():
-	pupByShelterGroup = pupQuery.order_by(Puppy.shelter_id.asc()).all()
-	for pup in pupByShelterGroup:
-		print pup.name
-		print pup.shelter_id
-		print "______________________________"
-#this function is used to get one shelter only
+	return pupQuery.order_by(Puppy.shelter_id.asc()).all()
+	
+#this function is used to get one shelter only.
 def getShelter(_id):
 	return shelterQuery.filter(Shelter.id == _id).first()
 
-
-
-
-
-
-#def setting the shelter cap
+#method to change the shelter cap if needed.
 def setShelterCap(_id, cap):
 	shelter = getShelter(_id)
 	shelter.max_capacity = cap
 	session.add(shelter)
 	session.commit()
 
-
-#inner join being used to get the the ammount of pups in the shelter
+#method to get the occupancy in a given shelter.
 def getShelterOccupancy(_id):
 	result = session.query(Puppy, Shelter).join(Shelter).filter(Shelter.id == _id).count()
 	if not result:
-			print "Something strange is going on"
-			return
+		return "Something strange is going on"	
 	return result
 
+#method to get the capacity in a shelter.
 def getShelterCap(_id):
-	result = session.query(Shelter).filter(Shelter.id == _id).one()
-	if not result: 
-			print "So shelter found"
-			return
+	result = shelterQuery.filter(Shelter.id == _id).one()
+	if not result:
+		return "Something strange is going on"	
 	return result.max_capacity
-
 
 #this method use a dictionary to return the id and name of shelter with vacancies. 
 def vacantShelter():
-    shelters = session.query(Shelter)
     shelter_id = {}
-    for shelter in shelters:
+    for shelter in shelterQuery:
           if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
             shelter_id.update({shelter.id:shelter.name})
-    
     return shelter_id
 
-
-#this function is used to set up the name of the adoptor
-def setAdoptor(name):
-	adoptor =Adoptor(name=name)
-	session.add(adoptor)
+#this function is used to set a new user
+def setUser(name, email):
+	user =User(name=name, email=email)
+	session.add(user)
 	session.commit
 
-
-
-
-
 #Add a pup to find what shelter to put the pup in.
-
-def addPup(name, gender, dateOfBirth, picture, shelter_id, weight):
+def addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by):
 	if(getShelterCap(shelter_id) >= getShelterOccupancy(shelter_id)):
 		dob = date_time.strptime(dateOfBirth, '%Y-%m-%d')
-		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, picture = picture, shelter_id =shelter_id, weight = weight)
+		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, picture = picture, shelter_id =shelter_id, weight = weight, entered_by=entered_by)
 		session.add(pupToAdd)
 		session.commit()
-		print dob
 	else:
-		vacantShelter() 
-		print "Please try again!"
+		return 'ALL SHELTER ARE FULL'
 
 			
 
