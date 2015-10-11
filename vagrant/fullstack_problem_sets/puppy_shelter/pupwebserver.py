@@ -46,6 +46,15 @@ def showLogin():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    #see if connected
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+
+
+
+
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -159,16 +168,31 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
 
 
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+   
 @app.route('/')
 @app.route('/pups/')
 def pups():
 	return render_template('pupshome.html')
-@app.route('/pups/test')
-def pupsTest():
-	return render_template('pupttest.html')
-
 
 #search for a pup  
 @app.route('/pups/search/', methods=['GET', 'POST'])
@@ -209,12 +233,14 @@ def pupsSearch():
         		puppy_list = puppy_list.filter(Puppy.gender == 'female')
         	else:
         		puppy_list = puppy_list.filter(Puppy.gender == 'male')
+
         #start and end are called at the start of the block and use a method from pup_meth to get the range.
         if kwargs['dateOfBirth'] == 'any':
         	puppy_list = puppy_list
         else:
         	puppy_list = puppy_list.filter(and_(Puppy.dateOfBirth <= startDate, Puppy.dateOfBirth >= endDate))
-        #block of code used to pick the shelter from the shelters in the the db
+        
+        #block of code used to pick the shelter from the shelters in the db
         if kwargs['shelter_id'] == 'all':
         	puppy_list = puppy_list
         else:
@@ -227,14 +253,15 @@ def pupsSearch():
     shelters = session.query(Shelter)
     return render_template('pupssearch.html', shelters=shelters)
 	
-
 @app.route('/pups/adopt/<int:pup_id>/<int:shelter_id>', methods=['GET', 'POST'])
 def pupsAdopt(pup_id, shelter_id):
-	#checking to see if a user is logged on or not.  
+    
+    #checking to see if the user is logged in
+    if 'username' not in login_session:
+        return redirect ('/login')
+	  
     if request.method == 'POST':
-        if 'username' not in loggin_session:
-            return redirect('/login')
-	return  render_template('pupsnewparent.html')
+        return  render_template('pupsnewparent.html')
 
 
 	pup = session.query(Puppy).filter(Puppy.id==pup_id, shelter_id==shelter_id).one()
@@ -243,33 +270,47 @@ def pupsAdopt(pup_id, shelter_id):
 
 @app.route('/pups/rehome/', methods=['GET', 'POST'])
 def pupsRehome():
-	if request.method == 'POST':
-		kwargs = { x:request.form[x] for x in request.form if request.form[x] and request.form[x] != 'default' }
-		name = kwargs['name']
-		gender = kwargs['gender']
-		dob = kwargs['dateOfBirth']
-		weight = kwargs['weight']
-		shelter_id = kwargs['shelter']
-		print name + gender + dob + weight + shelter_id
-		addPup(name, gender, dob, 'none', shelter_id, weight)
-		
-		return render_template('pupshome.html')
-	
-	
-	
+    #checking to see if the user is logged in
+    if 'username' not in login_session:
+        return redirect ('/login')
 
-	#vacantShelter(): 
-	#returns a dictionary object that includes the id and the name 
-	# of shelters with space available.
-	shelters = vacantShelter()
-	return render_template('pupsrehome.html', shelters=shelters)
+    #get dictionary for vacant shelters. 
+    vac_shelters = vacantShelter()
+
+    if request.method == 'POST':
+        kwargs = { x:request.form[x] for x in request.form if request.form[x] and request.form[x] != 'default' }
+        name = kwargs['name']
+        gender = kwargs['gender']
+        dateOfBirth= kwargs['dateOfBirth']
+        picture = 'http://www.graphicsdb.com/data/media/441/human_dog_face.jpg'
+        weight = kwargs['weight']
+        shelter_id = kwargs['shelter']
+        entered_by=login_session['user_id']
+
+
+        #addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by)
+        addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by)
+        print entered_by
+        flash(name + ' has been added to the DB')
+
+        return render_template('pupshome.html')
+
+
+
+
+
+
+    return render_template('pupsrehome.html', shelters=vac_shelters)
+
 @app.route('/pups/edit/<int:pup_id>/', methods=['GET', 'POST'])
 def pupsEdit(pup_id):
+    #checking to see if the user is logged in
 
 	return render_template('pupsedit.html')
 
 @app.route('/pups/delete/<int:pup_id>/', methods=['GET', 'POST'])
 def pupsDelete(pup_id):
+    #checking to see if the user is logged in
 
 	return render_template('pupsdelete.html')
 

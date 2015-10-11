@@ -86,11 +86,14 @@ def getShelterCap(_id):
 
 #this method use a dictionary to return the id and name of shelter with vacancies. 
 def vacantShelter():
+    shelters = session.query(Shelter)
     shelter_id = {}
-    for shelter in shelterQuery:
+    for shelter in shelters:
           if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
             shelter_id.update({shelter.id:shelter.name})
+    
     return shelter_id
+
 
 #this function is used to set a new user
 def setUser(name, email):
@@ -102,36 +105,8 @@ def setUser(name, email):
 def addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by):
 	if(getShelterCap(shelter_id) >= getShelterOccupancy(shelter_id)):
 		dob = date_time.strptime(dateOfBirth, '%Y-%m-%d')
-		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, picture = picture, shelter_id =shelter_id, weight = weight, entered_by=entered_by)
+		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, picture = picture, shelter_id = shelter_id, weight = weight, entered_by=entered_by)
 		session.add(pupToAdd)
 		session.commit()
 	else:
 		return 'ALL SHELTER ARE FULL'
-
-			
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-    
