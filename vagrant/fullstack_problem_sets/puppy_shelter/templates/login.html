@@ -12,10 +12,61 @@
     </div>
     <div class="col-lg-4">
     	<h2>Log In</h2>
-      	<p>Before you can ddopt or reHome a pet we need to know who you are. Use your existing Log in information for Google or Facebook to get started.</p>
-      	<p><a class="btn btn-primary" href="#" role="button">Sign In &raquo;</a></p> 
+      	<p>Sign in for full access to the Pups in the City application.</p>
+      
+        <!-- GOOGLE PLUS SIGN IN-->
+
+          
+        <div id="signInButton">
+          <span class="g-signin"
+            data-scope="openid email"
+            data-clientid="721722473267-ers262b6rivc6bte29g9grhn29f5an4o.apps.googleusercontent.com"
+            data-redirecturi="postmessage"
+            data-accesstype="offline"
+            data-cookiepolicy="single_host_origin"
+            data-callback="signInCallback"
+            data-approvalprompt="force">
+          </span>
+        </div>
+        <div id="result"></div>
+      	
     </div>
+
     <div class="col-lg-4">
     </div>     
  </div>
- {% endblock %}
+<script>
+function signInCallback(authResult) {
+  if (authResult['code']) {
+    // Hide the sign-in button now that the user is authorized
+    $('#signinButton').attr('style', 'display: none');
+    // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+    $.ajax({
+      type: 'POST',
+      url: '/gconnect?state={{STATE}}',
+      //Keeps JQuery from processing data to a string.
+      processData: false,
+      data: authResult['code'],
+      contentType: 'application/octet-stream; charset=utf-8',
+      success: function(result) {
+        // Handle or verify the server response if necessary.
+        if (result) {
+          $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+         setTimeout(function() {
+          window.location.href = "/pups";
+         }, 4000);
+          
+      } else if (authResult['error']) {
+    console.log('There was an error: ' + authResult['error']);
+  } else {
+        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+         }
+      }
+      
+  }); } }
+</script>
+ 
+{% endblock %}
+
+
+ 

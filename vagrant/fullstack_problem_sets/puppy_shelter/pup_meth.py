@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from puppy_db_setup import Base, Shelter, Puppy, Adoptor, AdoptorAndPuppy
+from datetime import datetime as date_time
 import datetime
 #specifies what db will be used
 engine = create_engine('sqlite:///puppyshelter.db')
@@ -135,11 +136,11 @@ def setAdoptor(name):
 
 def addPup(name, gender, dateOfBirth, picture, shelter_id, weight):
 	if(getShelterCap(shelter_id) >= getShelterOccupancy(shelter_id)):
-		dob = datetime.strptime(dateOfBirth, '%b %d %Y')
+		dob = date_time.strptime(dateOfBirth, '%Y-%m-%d')
 		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, picture = picture, shelter_id =shelter_id, weight = weight)
 		session.add(pupToAdd)
 		session.commit()
-		print name + ' has been added'
+		print dob
 	else:
 		vacantShelter() 
 		print "Please try again!"
