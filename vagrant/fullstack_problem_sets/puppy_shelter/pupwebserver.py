@@ -112,8 +112,6 @@ def fbconnect():
     flash("Now logged in as %s" % login_session['username'])
     return output
 
-
-
 @app.route('/fbdisconnect')
 def fbdisconnect():
     facebook_id = login_session['facebook_id']
@@ -249,8 +247,6 @@ def disconnect():
         flash("You were not logged in")
         return redirect(url_for('pups',control_notice=control_notice, error='true'))
 
-
-
 # DISCONNECTING  - Revoking the current user's token and reset the login_session
 @app.route('/gdisconnect')
 def gdisconnect():
@@ -344,7 +340,6 @@ def pupsSearch():
     # N.b. I moved this statement as it is only useful for GET requests:
     shelters = session.query(Shelter)
 
-
     return render_template('pupssearch.html', shelters=shelters)
 	
 @app.route('/pups/adopt/<int:pup_id>', methods=['GET', 'POST'])
@@ -360,9 +355,6 @@ def pupsAdopt(pup_id):
             puppy_id = pup.id, shelter_id = pup.shelter_id, adopter_name= login_session['username'], puppy_name = pup.name)
         flash('You have adopted this pup!')
         return render_template('pupshome.html', control_notice='true', error=error)
-
-
-
 
     return render_template('pupsadopt.html',pup=pup, shelter=shelter)
 
@@ -384,9 +376,11 @@ def pupsRehome():
         weight = kwargs['weight']
         shelter_id = kwargs['shelter']
         entered_by=getUserID(login_session['email'])
+
         #this method was comes from pup_methods
         #It takes in 7 variables and adds a new pup in the DB
         addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by)
+        
         #setting notice to display flash message
         control_notice = 'true'
         flash( name + ' has been added hopefully he gets adopted soon.')
@@ -407,8 +401,6 @@ def pupsEdit(pup_id):
     if pupToEdit.entered_by != login_session['user_id']:
         flash('Not authorized to change a pup you did not enter in the system.')
         return render_template('pupshome.html', control_notice=control_notice, error = 'true')
-
-
 
     current_shelter = session.query(Shelter).filter_by(id=pupToEdit.shelter_id).one()
     #get dictionary for any shelters with space available. 
@@ -439,15 +431,12 @@ def pupsEdit(pup_id):
                 pupToEdit.shelter_id = shelter_id
         flash('Changes made!')
  
-        
         session.add(pupToEdit)
         session.commit()
         return render_template('pupshome.html', control_notice='true', error=error)
     
-
     return render_template('pupsedit.html', pup_id = pup_id, pup = pupToEdit, vac_shelters=vac_shelters, current_shelter = current_shelter)
 
-#complete method
 @app.route('/pups/delete/<int:pup_id>/', methods=['GET', 'POST'])
 def pupsDelete(pup_id):
 
