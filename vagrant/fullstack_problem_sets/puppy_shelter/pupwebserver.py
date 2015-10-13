@@ -100,17 +100,7 @@ def fbconnect():
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
 
-    output = ''
-    output += '<h1>Welcome, '
-    output += login_session['username']
-
-    output += '!</h1>'
-    output += '<img src="'
-    output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-
-    flash("Now logged in as %s" % login_session['username'])
-    return output
+    return render_template('pupshome.html', control_notice='true', error=error)
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
@@ -267,6 +257,17 @@ def gdisconnect():
             json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
+
+#JSON requests
+# JSON APIs returns pups in each shelter based on certain querries
+@app.route('/pups/<int:shelter_id>/shelter/JSON')
+def pupsInShelterJSON(shelter_id):
+    shelter = session.query(Puppy).filter_by(shelter_id=shelter_id).all()
+    by_shelter = session.query(Puppy).filter_by(shelter_id=shelter_id).all()
+    return jsonify(Puppy=[i.serialize for i in by_shelter])
+
+
+
    
 @app.route('/')
 @app.route('/pups/')

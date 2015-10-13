@@ -43,8 +43,6 @@ class Shelter(Base):
         return {     
         'id': self.id,
         'name': self.name,
-        'city': self.city,
-        'state': self.state,
         }
 
 
@@ -68,7 +66,6 @@ class Puppy(Base):
         'id': self.id,
         'name': self.name,
         'gender': self.gender,
-        'dateOfBirth': self.dateOfBirth,
 
         }
 
