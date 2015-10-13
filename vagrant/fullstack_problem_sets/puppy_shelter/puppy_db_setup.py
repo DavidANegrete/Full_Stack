@@ -59,6 +59,7 @@ class Puppy(Base):
     shelter_id = Column(Integer, ForeignKey('shelter.id'))
     entered_by = Column(Integer, ForeignKey('user.id'))
     shelter = relationship(Shelter)
+    user = relationship(User)
     weight = Column(Numeric(10))
 
     @property
@@ -71,14 +72,25 @@ class Puppy(Base):
 
         }
 
-#A one to many table to show the relationship between an users and pups when a pup is adopted
+#A one to many table to show the relationship between an users and pups
 class UserAndPuppy(Base):
     __tablename__ = 'user_and_puppy'
     userId = Column(Integer, ForeignKey(User.id), primary_key = True)
     puppyId = Column(Integer, ForeignKey(Puppy.id), primary_key = True)
     puppy = relationship(Puppy)
     user = relationship(User)
-
+#Table to track new families
+class NewFamily(Base):
+    __tablename__ = 'new_family'
+    id = Column(Integer, primary_key=True)
+    adopter_id = Column(Integer, ForeignKey('user.id'))
+    puppy_id = Column(Integer, ForeignKey('puppy.id'))
+    shelter_id = Column(Integer, ForeignKey('shelter.id'))
+    adopter_name = Column(String(250), nullable=False)
+    puppy_name = Column(String(250), nullable=False)
+    shelter = relationship(Shelter)
+    puppy = relationship(Puppy)
+    user = relationship(User)
 
 engine = create_engine('sqlite:///puppyshelterwithusers.db')
  

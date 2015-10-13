@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
+    
+    <!-- App info: -->
+    <meta name="Pups in the City" content="">
     <meta name="David A Negrete" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap and CSS -->
   	<!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
+    
+    <!-- Custom styles for this template -->
+    <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='styles.css') }}'>
+    
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-
-    <!-- Custom styles for this template -->
-  	<link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='styles.css') }}'>
-    
-    <!-- Including jquery and jquery validate -->
+  
+    <!-- Jquery validate used for form input validation-->
     <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -34,56 +34,76 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
    
-
-
-    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-    
-
-
+    <!--PRE-REQUISITES FOR GOOGLE SIGN IN -->
     <script src="//apis.google.com/js/platform.js?onload=start"></script> 
 
-    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
-    <title>{% block title %} - Pups in the City {% endblock %}</title> 
-  </head>
-  	<body>
-		<div class="container">
-			<div class="masthead">
-			<div id ="navigation" >
-			{% block nav %}
-				<nav>
-					<ul class="nav nav-justified">
-						<li {% if page == 'home' %} class="active" {% endif %}><a href="{{url_for('pups')}}">Home</a></li>
-            			
-            			<li {% if page == 'search' %} class="active" {% endif %}><a href="{{url_for('pupsSearch')}}">Search</a></li>
-            			<li {% if page == 'rehome' %} class="active" {% endif %}><a href="{{url_for('pupsRehome')}}">Rehome</a></li>
-          			</ul>
-        		</nav>
-        	{% endblock %}	
-        </div>
-      		</div>
+    <title>{% block title %}Pups in the City{% endblock %}</title>
+    </head>
 
-          <div class = 'flash'>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul>
-              {% for message in messages %}
-              <li> <strong> {{ message }} </strong> </li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
+    <body>
+      <div class="container">
+        <div class="masthead">
+          <div id ="navigation" >
+            <div class ="col-me-6 text-right">
+              {%if 'username' not in session %}
+              <a href="{{url_for('showLogin')}}">Click here to log in</a>
+              {% else %}
+              <a href="{{url_for('disconnect')}}">Click here to log out</a>
+              {% endif %}
+
+            </div>
+            {% block nav %}
+            <nav>
+              <ul class="nav nav-justified">
+                <li {% if page == 'home' %} class="active" {% endif %}><a href="{{url_for('pups')}}">Home</a></li>
+           			<li {% if page == 'search' %} class="active" {% endif %}><a href="{{url_for('pupsSearch')}}">Search</a></li>
+                <li {% if page == 'rehome' %} class="active" {% endif %}><a href="{{url_for('pupsRehome')}}">Rehome</a></li>
+              </ul>
+        		</nav>
+            {% endblock %}
           </div>
-      		<!-- conent area -->
-      		{% block content %}
-			{% endblock %}
-			 <div id="footer">
-			 	{% block footer %}
-		    	<footer class="footer">
-		    		<p>&copy; GravyMobileApplicationDevelopment 2014</p>
-		      	</footer>
-		      	{% endblock %} 	
+        </div>
+        <br>
+
+        <!--Flash messages when CRUD activity has occured the database -->
+        
+        {% if control_notice == "true" %}
+        <div class = 'flash alert alert-success' role="alert">
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          {% for message in messages %}
+          <h5><strong>{{ message }}</strong></h5>
+          {% endfor %}
+          {% endif %}
+          {% endwith %}
+        </div>
+        {% endif %}
+
+        {% if error == "true" %}
+        <div class = 'flash alert alert-danger' role="alert">
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          {% for message in messages %}
+          <h5><strong>{{ message }}</strong></h5>
+          {% endfor %}
+          {% endif %}
+          {% endwith %}
+        </div>
+        {% endif %}
+
+        <br>
+                
+        <!-- Empty conent area template -->
+        {% block content %}
+        {% endblock %}
+
+			  <div id="footer">
+          {% block footer %}
+          <footer class="footer">
+            <p>&copy; GravyMobileApplicationDevelopment 2014</p>
+		      </footer>
+		      {% endblock %} 	
 		    </div>	
-    	</div>	
-		
-	</body>
+    	</div>
+    </body>
 </html>

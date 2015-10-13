@@ -9,6 +9,7 @@
 	<li class="previous" id = "back"><a href="{{url_for('pupsSearch')}}"><span aria-hidden="true">&larr;</span>Back</a></li>
 <hr>
 </nav>
+<p class="help-block">For full access that includes adopting and editing if you entered the pup please sign in</a>.</p>
  
 <h2>Search Results</h2>
 <div class="list-group">
@@ -20,11 +21,6 @@
       <h5>Gender:</h5><p class="list-group-item-text"> {{ pup.gender }}</p>
       <h5>Date of Birth:</h5><p class="list-group-item-text"> {{ pup.dateOfBirth }}</p>
       <h5>Shelter:</h5> <p class="list-group-item-text">{{ shel.name }}</p><br>
-       <p><a class="btn btn-primary" href="{{url_for('pupsAdopt', shelter_id=shel.id, pup_id=pup.id, pup_name = pup.name, shel_name = shel.name) }}" role="button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Adopt</a></p>
-       {% if user_id == pup.entered_by %}       
-       <p><a class="btn btn-primary" href="{{url_for('pupsEdit', pup_id=pup.id) }}" role="button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Edit</a></p>
-       <p><a class="btn btn-primary" href="{{url_for('pupsDelete', pup_id=pup.id) }}" role="button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Delete</a></p> 
-       {% endif %}
     </div>
     {% endfor %}
 </div>

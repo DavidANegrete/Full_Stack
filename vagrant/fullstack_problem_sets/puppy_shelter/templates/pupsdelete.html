@@ -3,19 +3,50 @@
 {% block head %}
 {% endblock %}
 
-{%set page = "edit" %}
-
-
+{%set page = "delete" %}
+{% block content %}
 <div class="container">
   <div class="masthead">
       {% block navigation %}
       {% endblock %}
   </div>
+  <nav>
+  	<ul class="pager">
+  		<li class="previous" id = "back"><a onclick="goBack()"><span aria-hidden="true">&larr;</span>Back</a></li>
+  	</ul>
+  </nav>
+  <br><br><br>
+  	<form action= "{{url_for('pupsDelete',pup_id = pup_id)}}" method="post">
+  		<div class="form-group">
+    		<h1>You are about to remove <span id="bold"> {{puppy.name}} </span></h1>
+    		<label for="name">Pup Name</label>
+    		<input type="text" class="form-control" id="name" name="name" placeholder="Name" value='Name'>
+    		<p class="help-block">To remove {% if puppy.gender == 'male' %} him {% else %} her {% endif %} enter the pups name and press 'Remove'.</p>
+  		</div>
+  		<button type="submit" class="btn btn-default">Remove</button>
+  	</form>
+  	<br>
+  	{%set error = 'true' %}
+  	{% if error == control_error %}
+  	    <div class = 'flash alert alert-danger' role="alert">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+              <h5> <strong> {{ message }} </strong> </h5>
+              {% endfor %}
+            {% endif %}
+            {% endwith %}
+         </div>
+    {% endif %}
+</div>
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
 
- 
-  {% block content %}
-  <!-- Jumbotron -->
-
-  <h1>This is the delete page</h1>
+{% endblock %}
   
-  {% endblock %}
+
+  
+  

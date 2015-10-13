@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy
+from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy, NewFamily
 from datetime import datetime as date_time
 import datetime
 #specifies what db will be used
@@ -104,9 +104,13 @@ def setUser(name, email):
 #Add a pup to find what shelter to put the pup in.
 def addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by):
 	if(getShelterCap(shelter_id) >= getShelterOccupancy(shelter_id)):
-		dob = date_time.strptime(dateOfBirth, '%Y-%m-%d')
+		dob = getDOB(dateOfBirth)
 		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, picture = picture, shelter_id = shelter_id, weight = weight, entered_by=entered_by)
 		session.add(pupToAdd)
 		session.commit()
 	else:
 		return 'ALL SHELTER ARE FULL'
+
+#Method takes a string format 'YYYY-MM-DD' and returns a date object
+def getDOB(dateOfBirth):
+	return date_time.strptime(dateOfBirth, '%Y-%m-%d')

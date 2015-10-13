@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker  
-from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy
+from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy, NewFamily
 
 import random, string
 from pup_methods import * 
@@ -35,6 +35,9 @@ pupQuery = session.query(Puppy)
 
 shelterQuery = session.query(Shelter)
 
+control_notice = 'false'
+error = 'false'
+
 # Create anti-forgery state token
 @app.route('/login')
 def showLogin():
@@ -44,23 +47,91 @@ def showLogin():
     # return "The current session state is %s" % login_session['state']
     return render_template('login.html', STATE=state)
 
-@app.route('/gconnect', methods=['POST'])
-def gconnect():
-    #see if connected
+#FB - loggin 
+@app.route('/fbconnect', methods=['POST'])
+def fbconnect():
+    if request.args.get('state') != login_session['state']:
+        response = make_response(json.dumps('Invalid state parameter.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    access_token = request.data
+    print "access token received %s " % access_token
+
+    app_id = json.loads(open('fb_client_secrets.json', 'r').read())[
+        'web']['app_id']
+    app_secret = json.loads(
+        open('fb_client_secrets.json', 'r').read())['web']['app_secret']
+    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
+        app_id, app_secret, access_token)
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+
+    # Use token to get user info from API
+    userinfo_url = "https://graph.facebook.com/v2.4/me"
+    # strip expire tag from access token
+    token = result.split("&")[0]
+
+    url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' % token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+    # print "url sent for API access:%s"% url
+    # print "API JSON result: %s" % result
+    data = json.loads(result)
+    login_session['provider'] = 'facebook'
+    login_session['username'] = data["name"]
+    login_session['email'] = data["email"]
+    login_session['facebook_id'] = data["id"]
+
+    # The token must be stored in the login_session in order to properly logout, let's strip out the information before the equals sign in our token
+    stored_token = token.split("=")[1]
+    login_session['access_token'] = stored_token
+
+    # Get user picture
+    url = 'https://graph.facebook.com/v2.4/me/picture?%s&redirect=0&height=200&width=200' % token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+    data = json.loads(result)
+
+    login_session['picture'] = data["data"]["url"]
+
+    # see if user exists
     user_id = getUserID(login_session['email'])
     if not user_id:
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
 
+    output = ''
+    output += '<h1>Welcome, '
+    output += login_session['username']
+
+    output += '!</h1>'
+    output += '<img src="'
+    output += login_session['picture']
+    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+
+    flash("Now logged in as %s" % login_session['username'])
+    return output
 
 
 
+@app.route('/fbdisconnect')
+def fbdisconnect():
+    facebook_id = login_session['facebook_id']
+    # The access token must me included to successfully logout
+    access_token = login_session['access_token']
+    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
+    h = httplib2.Http()
+    result = h.request(url, 'DELETE')[1]
+    return "you have been logged out"
+
+@app.route('/gconnect', methods=['POST'])
+def gconnect():
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    # Auth code
+    # Obtain authorization code
     code = request.data
 
     try:
@@ -109,7 +180,7 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    # Store the access session token
+    # Store the access token in the session for later use.
     login_session['credentials'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
@@ -123,50 +194,16 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+    # ADD PROVIDER TO LOGIN SESSION
+    login_session['provider'] = 'google'
 
-    output = ''
-    output += '<h1>Welcome, '
-    output += login_session['username']
-    output += '!</h1>'
-    output += '<img src="'
-    output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-    flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
-    return output
+    # see if user exists, if it doesn't make a new one
+    user_id = getUserID(data["email"])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
 
-# DISCONNECTING  - Revoking the current user's token and reset the login_session
-@app.route('/gdisconnect')
-def gdisconnect():
-        # Only disconnect a connected user.
-    credentials = login_session.get('credentials')
-    if credentials is None:
-        response = make_response(
-            json.dumps('Current user not connected.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    access_token = login_session.get('credentials')
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
-
-    if result['status'] == '200':
-        # Reset the user's sesson.
-        del login_session['credentials']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        del login_session['picture']
-
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    else:
-        # For whatever reason, the given token was invalid.
-        response = make_response(
-            json.dumps('Failed to revoke token for given user.', 400))
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    return render_template('pupshome.html', control_notice='true', error=error)
 
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
@@ -188,11 +225,58 @@ def getUserID(email):
         return user.id
     except:
         return None
+
+# Disconnect 
+
+@app.route('/disconnect')
+def disconnect():
+    if 'provider' in login_session:
+        if login_session['provider'] == 'google':
+            gdisconnect()
+            del login_session['gplus_id']
+            del login_session['credentials']
+        if login_session['provider'] == 'facebook':
+            fbdisconnect()
+            del login_session['facebook_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        del login_session['user_id']
+        del login_session['provider']
+        flash("You have successfully been logged out.")
+        return redirect(url_for('pups', control_notice='true', error=error))
+    else:
+        flash("You were not logged in")
+        return redirect(url_for('pups',control_notice=control_notice, error='true'))
+
+
+
+# DISCONNECTING  - Revoking the current user's token and reset the login_session
+@app.route('/gdisconnect')
+def gdisconnect():
+    # Only disconnect a connected user.
+    credentials = login_session.get('credentials')
+    if credentials is None:
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    access_token = login_session['credentials']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    if result['status'] != '200':
+        # For whatever reason, the given token was invalid.
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
    
 @app.route('/')
 @app.route('/pups/')
 def pups():
-	return render_template('pupshome.html')
+	
+    return render_template('pupshome.html', control_notice=control_notice, error = error )
 
 #search for a pup  
 @app.route('/pups/search/', methods=['GET', 'POST'])
@@ -246,27 +330,41 @@ def pupsSearch():
         else:
         	sh_id = kwargs['shelter_id']
         	puppy_list = puppy_list.filter(Puppy.shelter_id == Shelter.id).filter(Puppy.shelter_id == int(sh_id)).all()
-        # rendering new page with results.
-        return render_template('searchresults.html', puppy_list=puppy_list)
+        #adding methods to control the rendering of edit, add or delete buttons depending on whether a user 
+        #is signed in or not. 
+        
+        #if they are they can see the pups available and get an option to adopt if not only the pups will show.
+        if 'username' not in login_session:
+            return render_template('searchresultssignedout.html', puppy_list=puppy_list)
+        else:
+            # rendering view with the option to adopt and edit/delete if a user is the same as the one that enered the pup
+            user_id=getUserID(login_session['email'])
+            return render_template('searchresults.html', puppy_list=puppy_list, user_id=user_id)
 
     # N.b. I moved this statement as it is only useful for GET requests:
     shelters = session.query(Shelter)
+
+
     return render_template('pupssearch.html', shelters=shelters)
 	
-@app.route('/pups/adopt/<int:pup_id>/<int:shelter_id>', methods=['GET', 'POST'])
-def pupsAdopt(pup_id, shelter_id):
-    
+@app.route('/pups/adopt/<int:pup_id>', methods=['GET', 'POST'])
+def pupsAdopt(pup_id):
     #checking to see if the user is logged in
     if 'username' not in login_session:
-        return redirect ('/login')
-	  
+        return redirect ('/login')    
+
+    pup = session.query(Puppy).filter_by(id=pup_id).one()
+    shelter =session.query(Shelter).filter_by(id=pup.shelter_id).one()
     if request.method == 'POST':
-        return  render_template('pupsnewparent.html')
+        newFamily = NewFamily(adopter_id=getUserID(login_session['email']),
+            puppy_id = pup.id, shelter_id = pup.shelter_id, adopter_name= login_session['username'], puppy_name = pup.name)
+        flash('You have adopted this pup!')
+        return render_template('pupshome.html', control_notice='true', error=error)
 
 
-	pup = session.query(Puppy).filter(Puppy.id==pup_id, shelter_id==shelter_id).one()
-	shelter = session.query(Shelter).filter(Shelter.id==shelter_id).one()
-	return render_template('pupsadopt.html',pup=pup, shelter=shelter)
+
+
+    return render_template('pupsadopt.html',pup=pup, shelter=shelter)
 
 @app.route('/pups/rehome/', methods=['GET', 'POST'])
 def pupsRehome():
@@ -274,7 +372,7 @@ def pupsRehome():
     if 'username' not in login_session:
         return redirect ('/login')
 
-    #get dictionary for vacant shelters. 
+    #get dictionary for any shelters with space available. 
     vac_shelters = vacantShelter()
 
     if request.method == 'POST':
@@ -285,38 +383,100 @@ def pupsRehome():
         picture = 'http://www.graphicsdb.com/data/media/441/human_dog_face.jpg'
         weight = kwargs['weight']
         shelter_id = kwargs['shelter']
-        entered_by=login_session['user_id']
-
-
-        #addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by)
+        entered_by=getUserID(login_session['email'])
+        #this method was comes from pup_methods
+        #It takes in 7 variables and adds a new pup in the DB
         addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by)
-        print entered_by
-        flash(name + ' has been added to the DB')
-
-        return render_template('pupshome.html')
-
-
-
-
-
+        #setting notice to display flash message
+        control_notice = 'true'
+        flash( name + ' has been added hopefully he gets adopted soon.')
+        return render_template('pupshome.html', control_notice=control_notice)
 
     return render_template('pupsrehome.html', shelters=vac_shelters)
 
 @app.route('/pups/edit/<int:pup_id>/', methods=['GET', 'POST'])
 def pupsEdit(pup_id):
+
     #checking to see if the user is logged in
+    if 'username' not in login_session:
+        return redirect ('/login')
 
-	return render_template('pupsedit.html')
+    pupToEdit = session.query(Puppy).filter_by(id=pup_id).one()
+   
+    #throwing and error and redirecting if not authorized to change the pup
+    if pupToEdit.entered_by != login_session['user_id']:
+        flash('Not authorized to change a pup you did not enter in the system.')
+        return render_template('pupshome.html', control_notice=control_notice, error = 'true')
 
+
+
+    current_shelter = session.query(Shelter).filter_by(id=pupToEdit.shelter_id).one()
+    #get dictionary for any shelters with space available. 
+    vac_shelters = vacantShelter()
+
+    if request.method == 'POST':
+        if request.form['name'] != pupToEdit.name:
+            name = request.form['name']
+            if name:
+                pupToEdit.name = name
+        if request.form['gender'] != pupToEdit.gender:
+            gender = request.form['gender']
+            if gender:
+                pupToEdit.gender = gender
+        if request.form['dateOfBirth'] != pupToEdit.dateOfBirth:
+            #getDOB converts a string into a date object
+            dob = getDOB(request.form['dateOfBirth'])
+            if dob:
+                pupToEdit.dateOfBirth = dob
+        if request.form['weight'] != pupToEdit.weight:
+            weight = request.form['weight']
+            if weight:
+                pupToEdit.weight = weight
+        if request.form['shelter'] != pupToEdit.shelter_id:
+            shelter_id = request.form['shelter']
+            if shelter_id:
+                new_shelter = session.query(Shelter).filter_by(id=shelter_id).one()
+                pupToEdit.shelter_id = shelter_id
+        flash('Changes made!')
+ 
+        
+        session.add(pupToEdit)
+        session.commit()
+        return render_template('pupshome.html', control_notice='true', error=error)
+    
+
+    return render_template('pupsedit.html', pup_id = pup_id, pup = pupToEdit, vac_shelters=vac_shelters, current_shelter = current_shelter)
+
+#complete method
 @app.route('/pups/delete/<int:pup_id>/', methods=['GET', 'POST'])
 def pupsDelete(pup_id):
+
     #checking to see if the user is logged in
+    if 'username' not in login_session:
+        return redirect ('/login')
 
-	return render_template('pupsdelete.html')
+    pupToDelete = session.query(Puppy).filter_by(id=pup_id).one()
 
+    #throwing and error and redirecting if not authorized to change the pup
+    if pupToDelete.entered_by != getUserID(login_session['email']):
+        flash('Not authorized to delete a pup you did not enter in the system.')
+        return render_template('pupshome.html', control_notice='false', error = 'true')
 
-
-
+    #checking to see if the user is logged in
+    if getUserID(login_session['email']) == pupToDelete.entered_by:
+        print 'authorized to remove'    
+        if request.method == 'POST':
+            if pupToDelete.name.lower() == request.form['name'].strip().lower():
+                session.delete(pupToDelete)
+                session.commit()
+                control_notice = 'true'
+                flash( pupToDelete.name + ' has been removed')
+                return render_template('pupshome.html', control_notice='true')
+            else:
+                control_error = 'true'
+                flash( "Enter " + pupToDelete.name + "'s name exactly to remove from the system!")
+                return render_template('pupsDelete.html', control_error =control_error, pup_id=pup_id,puppy = pupToDelete)
+    return render_template('pupsdelete.html', pup_id = pup_id, puppy = pupToDelete)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
