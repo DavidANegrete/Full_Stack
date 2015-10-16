@@ -102,7 +102,7 @@ def fbconnect():
     login_session['facebook_id'] = data["id"]
 
     # The token must be stored in the login_session in order to properly logout, 
-    #let's strip out the information before the equals sign in our token
+    # let's strip out the information before the equals sign in our token
     stored_token = token.split("=")[1]
     login_session['access_token'] = stored_token
 
@@ -295,7 +295,7 @@ def pupsSearch():
         if request.form[x] and request.form[x] != 'default' }
         
         # Method from pup_meth getAgeRange(var): take a numeric 
-        # variable and returns a coresponding age range in the form of a dictionay. 
+        # variable and returns a coresponding age range in the form of a dict. 
         ageRange=getAgeRange(kwargs['dateOfBirth'])
         
         # StartDate is the closest to the current date on any search.

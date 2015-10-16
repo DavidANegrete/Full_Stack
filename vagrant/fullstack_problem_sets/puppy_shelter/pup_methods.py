@@ -3,17 +3,17 @@ from sqlalchemy.orm import sessionmaker
 from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy, NewFamily
 from datetime import datetime as date_time
 import datetime
-#specifies what db will be used
+# Specifies what db will be used
 engine = create_engine('sqlite:///puppyshelterwithusers.db')
 
 Base.metadata.bind = engine
 
-DBSession = sessionmaker(bind=engine)
+DBSession = sessionmaker(bind = engine)
 
-#creates a stagging area to add to the db
+# Creates a stagging area to add to the db
 session = DBSession()
 
-#global variables
+# Global variables
 pupQuery = session.query(Puppy)
 
 shelterQuery = session.query(Shelter)
@@ -33,41 +33,44 @@ def getAgeRange(var):
 	using the datetime module, to get the date of today. '''
 	
 	dateRange ={}
+
+	today = datetime.date.today()
+
 	if var == '5':
-		today = datetime.date.today()
-		ancient = datetime.date.today() - datetime.timedelta(900 *365/12)
+		today = today
+		ancient = today - datetime.timedelta(900 * 365 / 12)
 		dateRange={ancient:today}
 	elif var == '6':
-		youngerThanSixMonths = datetime.date.today() - datetime.timedelta(6 *365/12)
+		youngerThanSixMonths = today - datetime.timedelta(6 * 365 / 12)
 		today = datetime.date.today()
 		dateRange = {youngerThanSixMonths:today}
 	elif var == '7':
-		youngerThanSixMonths = datetime.date.today() - datetime.timedelta(6 *365/12)
-		threeYears = datetime.date.today() - datetime.timedelta(36 *365/12)
+		youngerThanSixMonths = today - datetime.timedelta(6 * 365 / 12)
+		threeYears = today - datetime.timedelta(36 * 365 / 12)
 		dateRange = {threeYears:youngerThanSixMonths}
 	elif var == '8':
-		threeYears = datetime.date.today() - datetime.timedelta(36 *365/12)
-		sixYears = datetime.date.today() - datetime.timedelta(72 *365/12)
+		threeYears = today - datetime.timedelta(36 * 365 / 12)
+		sixYears = today - datetime.timedelta(72 * 365 / 12)
 		dateRange = {sixYears:threeYears}
 	else:
-		sixYears = datetime.date.today() - datetime.timedelta(72 *365/12)
-		ancient = datetime.date.today() - datetime.timedelta(300 *365/12)
+		sixYears = today - datetime.timedelta(72 * 365 / 12)
+		ancient = today - datetime.timedelta(300 * 365 / 12)
 		dateRange = {ancient:sixYears}
 	return dateRange
 
 	
 # This method is used to get one shelter only.
 def getShelter(_id):
-	'''
-	Method returns a sheleter object when a shelter id is entered.
-	'''
+
+	'''	Method returns a sheleter object when a shelter id is entered.'''
+
 	return shelterQuery.filter(Shelter.id == _id).first()
 
 # Method to change the shelter cap if needed.
 def setShelterCap(_id, cap):
-	'''
-	This is a setter method to change the shelters capacity
-	'''
+
+	'''	This is a setter method to change the shelters capacity	'''
+
 	shelter = getShelter(_id)
 	shelter.max_capacity = cap
 	session.add(shelter)
@@ -76,10 +79,10 @@ def setShelterCap(_id, cap):
 
 # Method gets the occupancy in a given shelter.
 def getShelterOccupancy(_id):
-	'''
-	This method returns back the capacity in a shelter when a shelter id
-	is entered.
-	'''
+
+	''' This method returns back the capacity in a shelter 
+	when a shelter id is entered. '''
+
 	result = pupAndShelter.join(Shelter).filter(Shelter.id == _id).count()
 	if not result:
 		return "Something strange is going on"	
@@ -87,9 +90,9 @@ def getShelterOccupancy(_id):
 
 # Method returns the capacity in a shelter.
 def getShelterCap(_id):
-	'''
-	Method the capacity in a shelter. Takes in a shelter id.
-	'''
+
+	'''	Method the capacity in a shelter. Takes in a shelter id. '''
+
 	result = shelterQuery.filter(Shelter.id == _id).one()
 	if not result:
 		return "Something strange is going on"	
@@ -98,20 +101,22 @@ def getShelterCap(_id):
 
 # This method use a dictionary to return the id and name of shelter with vacancies. 
 def vacantShelter():
-    shelters = session.query(Shelter)
-    shelter_id = {}
-    for shelter in shelters:
-        if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
-            shelter_id.update({shelter.id:shelter.name})
-    
-    return shelter_id
+
+	'''method returns vacant shelters'''
+	
+	shelters = session.query(Shelter)
+	shelter_id = {}
+	for shelter in shelters:
+		if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):
+			shelter_id.update({shelter.id:shelter.name})
+			return shelter_id
 
 # Add a pup to find what shelter to put the pup in.
 def addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by):
-	'''
-	Method creates a new puppy object, it uses getDOB
-	to turn a string to a datetime object.
-	'''
+
+	''' Method creates a new puppy object, it uses getDOB to 
+	turn a string to a datetime object. '''
+
 	if(getShelterCap(shelter_id) >= getShelterOccupancy(shelter_id)):
 		dob = getDOB(dateOfBirth)
 		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, 
@@ -124,10 +129,11 @@ def addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by):
 
 # Create new family
 def newFam(adopter_id, adopter_name, puppy_id, puppy_name, shelter_id, ):
-	'''
-	Method inserts the followiing to the NewFamily table:
-	adopter_id(User.id), adopter_name(User.name), (Puppy.id), (Puppy.name), (Shelter.id)
-	'''
+
+	''' Method inserts the followiing to the NewFamily table: 
+	adopter_id(User.id), adopter_name(User.name), (Puppy.id), 
+	(Puppy.name), (Shelter.id) '''
+
 	newFam = NewFamily(adopter_id = adopter_id,
 		adopter_name = adopter_name, puppy_id = puppy_id,
 		puppy_name = puppy_name, shelter_id = shelter_id)
@@ -137,7 +143,9 @@ def newFam(adopter_id, adopter_name, puppy_id, puppy_name, shelter_id, ):
 
 # Method takes a string format 'YYYY-MM-DD' and returns a date object
 def getDOB(dateOfBirth):
-	''' Here in the method I used the datetime module to convert a string to a date
-	    object. This was created because I was not able to insert a string as a date in the database. 
-	'''
+
+	''' Here in the method I used the datetime module to convert a 
+	string to a date object. This was created because I was not able 
+	to insert a string as a date in the database. '''
+
 	return date_time.strptime(dateOfBirth, '%Y-%m-%d')

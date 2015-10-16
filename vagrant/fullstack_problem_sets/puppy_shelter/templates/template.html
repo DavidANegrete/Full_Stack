@@ -3,18 +3,17 @@ from sqlalchemy.orm import sessionmaker
 from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy, NewFamily
 from datetime import datetime as date_time
 import datetime
-
-# specifies what db will be used
+#specifies what db will be used
 engine = create_engine('sqlite:///puppyshelterwithusers.db')
 
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 
-# creates a stagging area to add to the db
+#creates a stagging area to add to the db
 session = DBSession()
 
-# variables
+#global variables
 pupQuery = session.query(Puppy)
 
 pupAndShelter = pupQuery = session.query(Puppy, Shelter)
@@ -77,6 +76,7 @@ def setShelterCap(_id, cap):
 	session.add(shelter)
 	session.commit()
 
+
 # Method gets the occupancy in a given shelter.
 def getShelterOccupancy(_id):
 	'''
@@ -98,30 +98,16 @@ def getShelterCap(_id):
 		return "Something strange is going on"	
 	return result.max_capacity
 
-# This method finds vacant shelters, returns a dictionary of the shelter id 
-# and name.  
+
+# This method use a dictionary to return the id and name of shelter with vacancies. 
 def vacantShelter():
-	'''
-	Method returns a key of shelter id and name if they have vacancies.
-	'''
     shelters = session.query(Shelter)
     shelter_id = {}
     for shelter in shelters:
-          if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
+        if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
             shelter_id.update({shelter.id:shelter.name})
+    
     return shelter_id
-
-
-# this method will delete a puppy from the db
-def pupRemove(pup_id):
-	'''
-	Method deletes a puppy from the Puppy table.
-	'''
-	pup = pupQuery.filter(id==pup_id).first()
-	for pup in pup:
-		print pup.name
-	#session.delete()
-	#session.commit()
 
 # Add a pup to find what shelter to put the pup in.
 def addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by):
@@ -150,6 +136,7 @@ def newFam(adopter_id, adopter_name, puppy_id, puppy_name, shelter_id, ):
 		puppy_name = puppy_name, shelter_id = shelter_id)
 	session.add(pupToAdd)
 	session.commit
+
 
 # Method takes a string format 'YYYY-MM-DD' and returns a date object
 def getDOB(dateOfBirth):
