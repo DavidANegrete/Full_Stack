@@ -12,7 +12,7 @@ body {
 }
 
 /* Main marketing message and sign up button */
-.jumbotron {
+.jumbo-home {
   text-align: center;
   background-color: transparent;
   background-image: url("../static/images/front-page-cover.jpg");
@@ -20,8 +20,13 @@ body {
   color: #b6b3c7;
   text-shadow: 2px 2px 4px #000000;
 }
+login{
+  background-color:#B5B6B3;
+}
+#iobutton{
+  margin-bottom: 6px;
 
-
+}
 }
 .jumbotron .btn {
   padding: 14px 24px;

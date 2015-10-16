@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+{% block title %}Pups in the City{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content%}
+<nav>
+	<ul class="pager">
+	<li class="previous" id = "back"><a href="{{url_for('pupsSearch')}}"><span aria-hidden="true">&larr;</span>Back</a></li>
+<hr>
+</nav>
+<p class="help-block">For full access that includes adopting and editing if you entered the pup please sign in</a>.</p>
+ 
+<h2>Search Results</h2>
+<div class="list-group">
+
+  	{% for pup, shel in puppy_list %}
+    <div class="list-group-item active">
+      <img src="{{pup.picture}}" alt="Picture of a pup" class="img-thumbnail">
+
+      <h2 class="list-group-item-heading">{{ pup.name }}</h2><hr>
+      <h5>Gender:</h5><p class="list-group-item-text"> {{ pup.gender }}</p>
+      <h5>Date of Birth:</h5><p class="list-group-item-text"> {{ pup.dateOfBirth }}</p>
+      <h5>Shelter:</h5> <p class="list-group-item-text">{{ shel.name }}</p><br>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

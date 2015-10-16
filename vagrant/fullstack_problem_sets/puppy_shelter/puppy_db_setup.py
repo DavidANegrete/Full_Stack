@@ -1,21 +1,10 @@
-#
-#This file creates a database using SQLAlchemy
-#There are 4 steps to using it 
-#1. Configuration - imports all the modules
-#   - at the begining of the file 
-#   - imports all modules needed
-#   - creates the declarative base
-#   - at the end of the configuration file it creates the database and adds tables and colums
-#2. class - used to represent the data in python
-#3. table - represent the table in the db
-#4. mapper - reps the class the represents the columns with the class that represents the data
 import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, Date, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
- 
+
 Base = declarative_base()
 
 class User(Base):
@@ -35,17 +24,12 @@ class Shelter(Base):
     state = Column(String(20))
     zipCode = Column(String(10))
     website = Column(String)
-    max_capacity = Column(Integer(10))
-    current_capacity = Column(Integer(10))
+    max_capacity = Column(Integer)
+    current_capacity = Column(Integer)
 
     @property
     def serialize(self):
-        return {     
-        'id': self.id,
-        'name': self.name,
-        }
-
-
+        return {'id': self.id,'name': self.name,}
 
 class Puppy(Base):
     __tablename__ = 'puppy'
@@ -62,21 +46,17 @@ class Puppy(Base):
 
     @property
     def serialize(self):
-        return {
-        'id': self.id,
-        'name': self.name,
-        'gender': self.gender,
+        return {'id': self.id,'name': self.name,'gender': self.gender,}
 
-        }
-
-#A one to many table to show the relationship between an users and pups
+# A one to many table to show the relationship between an users and pups
 class UserAndPuppy(Base):
     __tablename__ = 'user_and_puppy'
     userId = Column(Integer, ForeignKey(User.id), primary_key = True)
     puppyId = Column(Integer, ForeignKey(Puppy.id), primary_key = True)
     puppy = relationship(Puppy)
     user = relationship(User)
-#Table to track new families
+
+# Table to track new families
 class NewFamily(Base):
     __tablename__ = 'new_family'
     id = Column(Integer, primary_key=True)
@@ -90,6 +70,5 @@ class NewFamily(Base):
     user = relationship(User)
 
 engine = create_engine('sqlite:///puppyshelterwithusers.db')
- 
 
 Base.metadata.create_all(engine)

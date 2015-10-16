@@ -37,6 +37,7 @@
     <!--PRE-REQUISITES FOR GOOGLE SIGN IN -->
     <script src="//apis.google.com/js/platform.js?onload=start"></script> 
 
+
     <title>{% block title %}Pups in the City{% endblock %}</title>
     </head>
 
@@ -44,13 +45,14 @@
       <div class="container">
         <div class="masthead">
           <div id ="navigation" >
+            {%if page != 'login' %}
             <div class ="col-me-6 text-right">
               {%if 'username' not in session %}
-              <a href="{{url_for('showLogin')}}">Click here to log in</a>
+              <a class="btn btn-default" id="iobutton" role="button" href="{{url_for('showLogin')}}" id="">Click to log in</a>
               {% else %}
-              <a href="{{url_for('disconnect')}}">Click here to log out</a>
+              <a class="btn btn-success" id="iobutton"role="button" href="{{url_for('disconnect')}}">Click here to log out</a>
               {% endif %}
-
+            {% endif %}
             </div>
             {% block nav %}
             <nav>

@@ -1,6 +1,7 @@
 {% extends "main.html" %}
 {% block title %}Pups in the City{% endblock %}
 {% block head %}
+
   <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
   </script>
@@ -12,64 +13,70 @@
 
 <!--Page identifier-->
 {%set page = "login" %}
-
-{% block content %}
-<div class="row">
-	<div class="col-lg-4">
-    </div>
-    <div class="col-lg-4">
-    	<h2>Log In</h2>
-      	<p>Sign in for full access to the Pups in the City application.</p>
+<div class="container">
+  <div class="masthead">    
+      {% block navigation %}
       
-        <!-- GOOGLE PLUS SIGN IN-->
+      {% endblock %}
+  </div>
 
-          
-        <div id="signInButton">
-          <span class="g-signin"
-            data-scope="openid email"
-            data-clientid="721722473267-ers262b6rivc6bte29g9grhn29f5an4o.apps.googleusercontent.com"
-            data-redirecturi="postmessage"
-            data-accesstype="offline"
-            data-cookiepolicy="single_host_origin"
-            data-callback="signInCallback"
-            data-approvalprompt="force">
-          </span>
-        </div>
-        <div id="result"></div>
-      	
-    </div>
+  {% block content %} 
+  <div class="inner cover">
+  
+    <div class="row>">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="login " >
+            <h3 class="cover-heading">Log In</h3>
+    <p class="lead">By signing in you are able to adot a pup or rehome one. If you decide to rehome one and change your mind don't worry you can take that pup back</p>
+    <div>
 
-    <div class="col-lg-4">
-    </div>     
- </div>
+
+                             <div id="signInButton">
+                              <span class="g-signin"
+                                data-scope="openid email"
+                                data-clientid="721722473267-ers262b6rivc6bte29g9grhn29f5an4o.apps.googleusercontent.com"
+                                data-redirecturi="postmessage"
+                                data-accesstype="offline"
+                                data-cookiepolicy="single_host_origin"
+                                data-callback="signInCallback"
+                                data-approvalprompt="force">
+                              </span></div>
+                              <button><fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+                              <a href='javascript:sendTokenToServer()'>Use Facebook</a></fb:login-button></button>
+                              <div id="result"></div>
+                            </div>
+                              
+      </div>
+ 
 <script>
 function signInCallback(authResult) {
   if (authResult['code']) {
     // Hide the sign-in button now that the user is authorized
     $('#signinButton').attr('style', 'display: none');
-    // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+    // Send the one-time-use code to the server, if the server responds, 
+    // write a 'login successful' message to the web page and then redirect back 
+    // to the main restaurants page
     $.ajax({
       type: 'POST',
       url: '/gconnect?state={{STATE}}',
-      //Keeps JQuery from processing response into a string data to a string.
+      // Keeps JQuery from processing response into a string data to a string.
       processData: false,
       data: authResult['code'],
       contentType: 'application/octet-stream; charset=utf-8',
       success: function(result) {
         // Handle or verify the server response if necessary.
         if (result) {
-          $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+          $('#result').html()
          setTimeout(function() {
           window.location.href = "/pups";
-         }, 4000);
-          
+         }, 200);   
       } else if (authResult['error']) {
     console.log('There was an error: ' + authResult['error']);
   } else {
         $('#result').html('Failed to make a server-side call. Check your configuration and console.');
          }
       }
-      
   }); } }
 </script> 
 
@@ -114,7 +121,7 @@ function signInCallback(authResult) {
           $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
          setTimeout(function() {
           window.location.href = "/pups";
-         }, 3000);
+         }, 0);
           
       } else {
         $('#result').html('Failed to make a server-side call. Check your configuration and console.');
@@ -126,20 +133,5 @@ function signInCallback(authResult) {
   }
 </script>
 
-
-<button>
-         
-
-          <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
-<a href='javascript:sendTokenToServer()'>Login with Facebook</a>
-
-</fb:login-button>
-
-
-</button>
-<!--END FACEBOOK SIGN IN -->
-
-{% endblock %}
-
-
- 
+  {% endblock %}
+</div>

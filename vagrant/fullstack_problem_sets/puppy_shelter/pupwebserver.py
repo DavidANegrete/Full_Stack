@@ -1,42 +1,60 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-from flask import session as login_session
-app = Flask(__name__)
-
+from flask import Flask, render_template, request, redirect 
+from flask import url_for, flash, jsonify
 from sqlalchemy import create_engine, and_
-from sqlalchemy.orm import sessionmaker  
-from puppy_db_setup import Base, Shelter, Puppy, User, UserAndPuppy, NewFamily
-
-import random, string
-from pup_methods import * 
-
-# IMPORTS FOR THIS STEP
+from sqlalchemy.orm import sessionmaker
+from puppy_db_setup import Base, Shelter, Puppy,User 
+from puppy_db_setup import UserAndPuppy, User, NewFamily
+from flask import session as login_session
+from werkzeug import secure_filename
+from functools import wraps
+import os
+import random
+import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
 import json
 from flask import make_response
 import requests
-
+from pup_methods import *
 import logging
 
-#getting the client id to cross check authentication
+# Constants for uploads
+UPLOAD_FOLDER = 'static/images/uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+app = Flask(__name__)
+
+# setting up the upload folder for the images
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Cross check Authentication
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Pups in the City"
 
+# Connect to the Database and session
 engine = create_engine('sqlite:///puppyshelterwithusers.db')
 Base.metadata.bind = engine
 
-DBSession = sessionmaker(bind=engine)
+DBSession = sessionmaker(bind = engine)
 session = DBSession()
 
-#global variables
+# Session variables for querys
 pupQuery = session.query(Puppy)
-
 shelterQuery = session.query(Shelter)
+userQuery = session.query(User)
+queryPupnShelter = session.query(Puppy, Shelter)
 
-control_notice = 'false'
-error = 'false'
+# Decorator function to keep views accisible by some only.
+def logInDecorator(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        if 'username' not in login_session:
+            return redirect (url_for('showLogin', next = request.url))
+        return f(*args, **kwds)
+    return wrapper
+
 
 # Create anti-forgery state token
 @app.route('/login')
@@ -45,9 +63,10 @@ def showLogin():
                     for x in xrange(32))
     login_session['state'] = state
     # return "The current session state is %s" % login_session['state']
-    return render_template('login.html', STATE=state)
+    return render_template('login.html', STATE = state)
 
-#FB - loggin 
+
+# FB - loggin
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
     if request.args.get('state') != login_session['state']:
@@ -68,9 +87,9 @@ def fbconnect():
 
     # Use token to get user info from API
     userinfo_url = "https://graph.facebook.com/v2.4/me"
+
     # strip expire tag from access token
     token = result.split("&")[0]
-
     url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
@@ -82,7 +101,8 @@ def fbconnect():
     login_session['email'] = data["email"]
     login_session['facebook_id'] = data["id"]
 
-    # The token must be stored in the login_session in order to properly logout, let's strip out the information before the equals sign in our token
+    # The token must be stored in the login_session in order to properly logout, 
+    #let's strip out the information before the equals sign in our token
     stored_token = token.split("=")[1]
     login_session['access_token'] = stored_token
 
@@ -91,7 +111,6 @@ def fbconnect():
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
-
     login_session['picture'] = data["data"]["url"]
 
     # see if user exists
@@ -99,18 +118,22 @@ def fbconnect():
     if not user_id:
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
+    flash('You are now signed in!')
 
-    return render_template('pupshome.html', control_notice='true', error=error)
+    return render_template('pupshome.html')
+
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
+    fb_permission_url = 'https://graph.facebook.com/%s/permissions?access_token=%s'
+    url = fb_permission_url% (facebook_id,access_token)
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
     return "you have been logged out"
+
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
@@ -119,9 +142,7 @@ def gconnect():
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    # Obtain authorization code
     code = request.data
-
     try:
         # Upgrade the authorization code into a credentials object
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
@@ -132,18 +153,16 @@ def gconnect():
             json.dumps('Failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-
     # Check that the access token is valid.
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
     h = httplib2.Http()
-    result = json.loads(h.request(url, 'GET')[1])
+    result = json.loads(h.request(url, 'GET')[1]) 
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 500)
         response.headers['Content-Type'] = 'application/json'
-
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
@@ -151,7 +170,6 @@ def gconnect():
             json.dumps("Token's user ID doesn't match given user ID."), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-
     # Verify that the access token is valid for this app.
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
@@ -159,63 +177,58 @@ def gconnect():
         print "Token's client ID does not match app's."
         response.headers['Content-Type'] = 'application/json'
         return response
-
     stored_credentials = login_session.get('credentials')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_credentials is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(json.dumps('User is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
-
     # Store the access token in the session for later use.
     login_session['credentials'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
-
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
-
     data = answer.json()
-
+    # Data variable passes data to the login session
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
-    # ADD PROVIDER TO LOGIN SESSION
     login_session['provider'] = 'google'
-
-    # see if user exists, if it doesn't make a new one
+    # Chek if user exists, if not makes a new one
     user_id = getUserID(data["email"])
     if not user_id:
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
+    flash('You are nog logged in!')
+    return render_template('pupshome.html')
 
-    return render_template('pupshome.html', control_notice='true', error=error)
-
+# Creates a new user if called 
 def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session[
-                   'email'], picture=login_session['picture'])
+    name = login_session['username']
+    email = login_session['email']
+    picture=login_session['picture']
+    newUser = User(name, email, picture)
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    user = userQuery.filter_by(email=login_session['email']).one()
     return user.id
 
-
+# Gets the user info from the user ID
 def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
+    user = userQuery.filter_by(id=user_id).one()
     return user
 
-
+# Gets the user ID from the email on the login session
 def getUserID(email):
     try:
-        user = session.query(User).filter_by(email=email).one()
+        user = userQuery.filter_by(email=email).one()
         return user.id
     except:
         return None
 
-# Disconnect 
-
+# Disconnect
 @app.route('/disconnect')
 def disconnect():
     if 'provider' in login_session:
@@ -232,10 +245,10 @@ def disconnect():
         del login_session['user_id']
         del login_session['provider']
         flash("You have successfully been logged out.")
-        return redirect(url_for('pups', control_notice='true', error=error))
+        return redirect(url_for('pups', control_notice='true'))
     else:
         flash("You were not logged in")
-        return redirect(url_for('pups',control_notice=control_notice, error='true'))
+        return redirect(url_for('pups',control_notice=notice, error='true'))
 
 # DISCONNECTING  - Revoking the current user's token and reset the login_session
 @app.route('/gdisconnect')
@@ -258,7 +271,7 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-#JSON requests
+# JSON requests
 # JSON APIs returns pups in each shelter based on certain querries
 @app.route('/pups/<int:shelter_id>/shelter/JSON')
 def pupsInShelterJSON(shelter_id):
@@ -266,147 +279,172 @@ def pupsInShelterJSON(shelter_id):
     by_shelter = session.query(Puppy).filter_by(shelter_id=shelter_id).all()
     return jsonify(Puppy=[i.serialize for i in by_shelter])
 
-
-
-   
 @app.route('/')
 @app.route('/pups/')
 def pups():
-	
-    return render_template('pupshome.html', control_notice=control_notice, error = error )
+    return render_template('pupshome.html')
 
-#search for a pup  
+# Search for a pup  
 @app.route('/pups/search/', methods=['GET', 'POST'])
 def pupsSearch():
-    
     if request.method == 'POST':
-
-    	startDate= ''
-    	endDate= ''  
-    	ageRange = {}
-        kwargs = { x:request.form[x] for x in request.form if request.form[x] and request.form[x] != 'default' }
+        startDate= ''
+        endDate= ''  
+        ageRange = {}
+        kwargs = { x:request.form[x] for x in request.form 
+        if request.form[x] and request.form[x] != 'default' }
         
-        #Method from pup_meth getAgeRange(var): take a numeric variable and returns a coresponding age range in the form of a dictionay. 
+        # Method from pup_meth getAgeRange(var): take a numeric 
+        # variable and returns a coresponding age range in the form of a dictionay. 
         ageRange=getAgeRange(kwargs['dateOfBirth'])
         
-        #startDate is the closest to the current date on any search.
+        # StartDate is the closest to the current date on any search.
         for key in ageRange:
-        	endDate = key
-        	startDate = ageRange[key]
-		
-		#puppy_list is a query object with all the puppies in the db. 
-		puppy_list = session.query(Puppy, Shelter).filter(Puppy.shelter_id == Shelter.id)
-		holder = kwargs['name']
-		#Checking if the value from input='name' is the same or less than 3 and return the puppy_list 
-		# or the search continues
-		if len(holder) >= 3 and holder == 'Name':
-			puppy_list=puppy_list
-		else:
-			name = kwargs['name'].strip().title()
-			if name:
-				    puppy_list = puppy_list.filter(Puppy.name == name)
+            endDate = key
+            startDate = ageRange[key]
+        
+        # puppy_list is a query object with all the puppies in the db. 
+        puppy_list = session.query(Puppy, Shelter).filter(
+            Puppy.shelter_id == Shelter.id)
+        holder = kwargs['name']
 
-        #block to check the gender selected	
+        # Checking if the value from input='name' is the same or less 
+        # than 3 and return the puppy_list or the search continues
+        if len(holder) >= 3 and holder == 'Name':
+            puppy_list=puppy_list
+        else:
+            name = kwargs['name'].strip().title()
+            if name:
+                    puppy_list = puppy_list.filter(Puppy.name == name)
+
+        #block to check the gender selected 
         if kwargs['gender'] == 'either':
-        	puppy_list = puppy_list
+            puppy_list = puppy_list
         else:
-        	if kwargs['gender'] == 'female':
-        		puppy_list = puppy_list.filter(Puppy.gender == 'female')
-        	else:
-        		puppy_list = puppy_list.filter(Puppy.gender == 'male')
+            if kwargs['gender'] == 'female':
+                puppy_list = puppy_list.filter(Puppy.gender == 'female')
+            else:
+                puppy_list = puppy_list.filter(Puppy.gender == 'male')
 
-        #start and end are called at the start of the block and use a method from pup_meth to get the range.
+        # start and end are called at the start of the block and use
+        # a method from pup_meth to get the range.
         if kwargs['dateOfBirth'] == 'any':
-        	puppy_list = puppy_list
+            puppy_list = puppy_list
         else:
-        	puppy_list = puppy_list.filter(and_(Puppy.dateOfBirth <= startDate, Puppy.dateOfBirth >= endDate))
+            puppy_list = puppy_list.filter(and_(Puppy.dateOfBirth <= startDate,
+            Puppy.dateOfBirth >= endDate))
         
-        #block of code used to pick the shelter from the shelters in the db
+        # Block of code used to pick the shelter from the shelters in the db
         if kwargs['shelter_id'] == 'all':
-        	puppy_list = puppy_list
+            puppy_list = puppy_list
         else:
-        	sh_id = kwargs['shelter_id']
-        	puppy_list = puppy_list.filter(Puppy.shelter_id == Shelter.id).filter(Puppy.shelter_id == int(sh_id)).all()
-        #adding methods to control the rendering of edit, add or delete buttons depending on whether a user 
-        #is signed in or not. 
-        
-        #if they are they can see the pups available and get an option to adopt if not only the pups will show.
+            sh_id = kwargs['shelter_id']
+            puppy_list = puppy_list.filter(Puppy.shelter_id == Shelter.id)
+            puppy_list = puppy_list.filter(Puppy.shelter_id == int(sh_id)).all()
+ 
+        # If they are logged in they can see the pups available and 
+        # get an option to adopt if not only the pups will show.
         if 'username' not in login_session:
-            return render_template('searchresultssignedout.html', puppy_list=puppy_list)
+            return render_template(
+            'signedoutresults.html', puppy_list=puppy_list)
         else:
-            # rendering view with the option to adopt and edit/delete if a user is the same as the one that enered the pup
+            # rendering view with the option to adopt and edit/delete if a user
+            # is the same as the one that enered the pup
             user_id=getUserID(login_session['email'])
-            return render_template('searchresults.html', puppy_list=puppy_list, user_id=user_id)
-
-    # N.b. I moved this statement as it is only useful for GET requests:
+            return render_template(
+            'searchresults.html', puppy_list=puppy_list, user_id=user_id)
     shelters = session.query(Shelter)
-
     return render_template('pupssearch.html', shelters=shelters)
 	
 @app.route('/pups/adopt/<int:pup_id>', methods=['GET', 'POST'])
-def pupsAdopt(pup_id):
-    #checking to see if the user is logged in
-    if 'username' not in login_session:
-        return redirect ('/login')    
-
+@logInDecorator
+def pupsAdopt(pup_id): 
     pup = session.query(Puppy).filter_by(id=pup_id).one()
     shelter =session.query(Shelter).filter_by(id=pup.shelter_id).one()
     if request.method == 'POST':
-        newFamily = NewFamily(adopter_id=getUserID(login_session['email']),
-            puppy_id = pup.id, shelter_id = pup.shelter_id, adopter_name= login_session['username'], puppy_name = pup.name)
-        flash('You have adopted this pup!')
-        return render_template('pupshome.html', control_notice='true', error=error)
+        adopter_id = getUserID(login_session['email'])
+        puppy_id = pup.id
+        shelter_id = pup.shelter_id
+        adopter_name = login_session['username']
+        puppy_name = pup.name
+        newfam = NewFamily(adopter_id=adopter_id, puppy_id=puppy_id,
+        shelter_id=shelter_id,adopter_name=adopter_name,
+        puppy_name=puppy_name)
+        session.add(newfam)
+        session.commit()
 
-    return render_template('pupsadopt.html',pup=pup, shelter=shelter)
+        session.delete(pup)
+        session.commit()            
+        flash('You have adopted this pup!')
+        # Method to delete a pup removes him
+        
+        return render_template('pupshome.html')
+    return render_template('pupsadopt.html', pup=pup, shelter=shelter)
+
+
+
+# making sure that the files uploaded are images only
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+# This method returns a URL of an uploaded file
+def show(file):
+    filename = 'http://127.0.0.1:5000/static/images/uploads/' + file
+    return filename
+
 
 @app.route('/pups/rehome/', methods=['GET', 'POST'])
+@logInDecorator
 def pupsRehome():
-    #checking to see if the user is logged in
-    if 'username' not in login_session:
-        return redirect ('/login')
-
-    #get dictionary for any shelters with space available. 
+    # get dictionary for any shelters with space available.
     vac_shelters = vacantShelter()
 
     if request.method == 'POST':
-        kwargs = { x:request.form[x] for x in request.form if request.form[x] and request.form[x] != 'default' }
+        kwargs = { x:request.form[x] for x in request.form 
+        if request.form[x] and request.form[x] != 'default' }
+
         name = kwargs['name']
         gender = kwargs['gender']
-        dateOfBirth= kwargs['dateOfBirth']
-        picture = 'http://www.graphicsdb.com/data/media/441/human_dog_face.jpg'
+        dateOfBirth = kwargs['dateOfBirth']
+        file = request.files['file']
+        if not file:
+            picture = '/static/images/uploads/'
         weight = kwargs['weight']
         shelter_id = kwargs['shelter']
         entered_by=getUserID(login_session['email'])
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            picture = show(filename)
 
-        #this method was comes from pup_methods
-        #It takes in 7 variables and adds a new pup in the DB
-        addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by)
-        
-        #setting notice to display flash message
+
+
+        # this method was comes from pup_methods
+        # It takes in 7 variables and adds a new pup in the DB
+        addPup(name, gender, dateOfBirth, picture,
+                    weight, shelter_id, entered_by)
+        # setting notice to display flash messag
         control_notice = 'true'
         flash( name + ' has been added hopefully he gets adopted soon.')
-        return render_template('pupshome.html', control_notice=control_notice)
+        return render_template('pupshome.html')
 
     return render_template('pupsrehome.html', shelters=vac_shelters)
 
 @app.route('/pups/edit/<int:pup_id>/', methods=['GET', 'POST'])
+@logInDecorator
 def pupsEdit(pup_id):
+    pupToEdit = pupQuery.filter_by(id=pup_id).one()
 
-    #checking to see if the user is logged in
-    if 'username' not in login_session:
-        return redirect ('/login')
-
-    pupToEdit = session.query(Puppy).filter_by(id=pup_id).one()
-   
-    #throwing and error and redirecting if not authorized to change the pup
+    # throwing and error and redirecting if not authorized to change the pup
     if pupToEdit.entered_by != login_session['user_id']:
         flash('Not authorized to change a pup you did not enter in the system.')
-        return render_template('pupshome.html', control_notice=control_notice, error = 'true')
-
-    current_shelter = session.query(Shelter).filter_by(id=pupToEdit.shelter_id).one()
-    #get dictionary for any shelters with space available. 
+        return render_template('pupshome.html', error = 'true')
+    current_shelter = shelterQuery.filter_by(id=pupToEdit.shelter_id).one()
+   
+    # get any shelters with space available from vacantShelter. 
     vac_shelters = vacantShelter()
-
+    
     if request.method == 'POST':
         if request.form['name'] != pupToEdit.name:
             name = request.form['name']
@@ -417,7 +455,7 @@ def pupsEdit(pup_id):
             if gender:
                 pupToEdit.gender = gender
         if request.form['dateOfBirth'] != pupToEdit.dateOfBirth:
-            #getDOB converts a string into a date object
+            # getDOB converts a string into a date object
             dob = getDOB(request.form['dateOfBirth'])
             if dob:
                 pupToEdit.dateOfBirth = dob
@@ -428,44 +466,37 @@ def pupsEdit(pup_id):
         if request.form['shelter'] != pupToEdit.shelter_id:
             shelter_id = request.form['shelter']
             if shelter_id:
-                new_shelter = session.query(Shelter).filter_by(id=shelter_id).one()
+                new_shelter = shelterQuery.filter_by(id=shelter_id).one()
                 pupToEdit.shelter_id = shelter_id
         flash('Changes made!')
- 
         session.add(pupToEdit)
         session.commit()
-        return render_template('pupshome.html', control_notice='true', error=error)
-    
-    return render_template('pupsedit.html', pup_id = pup_id, pup = pupToEdit, vac_shelters=vac_shelters, current_shelter = current_shelter)
+        return render_template('pupshome.html', notice='true')
+    return render_template('pupsedit.html', pup_id = pup_id, pup = pupToEdit,
+        vac_shelters=vac_shelters, current_shelter = current_shelter)
 
 @app.route('/pups/delete/<int:pup_id>/', methods=['GET', 'POST'])
+@logInDecorator
 def pupsDelete(pup_id):
-
-    #checking to see if the user is logged in
-    if 'username' not in login_session:
-        return redirect ('/login')
-
     pupToDelete = session.query(Puppy).filter_by(id=pup_id).one()
 
     #throwing and error and redirecting if not authorized to change the pup
     if pupToDelete.entered_by != getUserID(login_session['email']):
         flash('Not authorized to delete a pup you did not enter in the system.')
-        return render_template('pupshome.html', control_notice='false', error = 'true')
+        return render_template('pupshome.html')
 
-    #checking to see if the user is logged in
+    # checking to see if the user is logged in
     if getUserID(login_session['email']) == pupToDelete.entered_by:
         print 'authorized to remove'    
         if request.method == 'POST':
-            if pupToDelete.name.lower() == request.form['name'].strip().lower():
+            if pupToDelete.name.lower() == request.form['name'].strip().lower(): 
                 session.delete(pupToDelete)
-                session.commit()
-                control_notice = 'true'
-                flash( pupToDelete.name + ' has been removed')
-                return render_template('pupshome.html', control_notice='true')
+                session.commit()            
+                flash( 'Pup has been removed')
+                return render_template('pupshome.html')
             else:
-                control_error = 'true'
-                flash( "Enter " + pupToDelete.name + "'s name exactly to remove from the system!")
-                return render_template('pupsDelete.html', control_error =control_error, pup_id=pup_id,puppy = pupToDelete)
+                flash( "Enter the exact spelling of the name!")
+                return render_template('pupsDelete.html', pup_id=pup_id)
     return render_template('pupsdelete.html', pup_id = pup_id, puppy = pupToDelete)
 
 if __name__ == '__main__':

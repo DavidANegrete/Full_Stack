@@ -18,16 +18,20 @@ pupQuery = session.query(Puppy)
 
 shelterQuery = session.query(Shelter)
 
+pupAndShelter = session.query(Puppy, Shelter)
+
 def getPupsAll():
 	return pupQuery.all()
 
-#querying the db for pups younger than 6 months.
-def getPuppies():
-	sixMonthsfromNow = datetime.date.today() - datetime.timedelta(6 *365/12)
-	return pupQuery.filter(Puppy.dateOfBirth > sixMonthsfromNow).order_by(Puppy.dateOfBirth).all()
 
-#takes a date from a date from the possible choices to pick and returns a dictionary (YYYY-DD-MM:YYYY-DD-MM).
+# This method gets an age range when a number is entered from 5-9
+# This method is used when a age range is selected as a search criteria.
 def getAgeRange(var):
+	
+	''' Takes in number in string format from 5-9 and returns and age range,
+	in a key value pair. The key is the most current of dates. Today is set
+	using the datetime module, to get the date of today. '''
+	
 	dateRange ={}
 	if var == '5':
 		today = datetime.date.today()
@@ -51,66 +55,89 @@ def getAgeRange(var):
 		dateRange = {ancient:sixYears}
 	return dateRange
 
-#method returns a string value when an input is entered.
-def getPupsByWeight():
-	return pupQuery.filter(Puppy.weight).order_by(Puppy.dateOfBirth).all()
-
-#the method returns all the pups in the db sorted by shelter_id
-def getPupsGroupByShelter():
-	return pupQuery.order_by(Puppy.shelter_id.asc()).all()
 	
-#this function is used to get one shelter only.
+# This method is used to get one shelter only.
 def getShelter(_id):
+	'''
+	Method returns a sheleter object when a shelter id is entered.
+	'''
 	return shelterQuery.filter(Shelter.id == _id).first()
 
-#method to change the shelter cap if needed.
+# Method to change the shelter cap if needed.
 def setShelterCap(_id, cap):
+	'''
+	This is a setter method to change the shelters capacity
+	'''
 	shelter = getShelter(_id)
 	shelter.max_capacity = cap
 	session.add(shelter)
 	session.commit()
 
-#method to get the occupancy in a given shelter.
+
+# Method gets the occupancy in a given shelter.
 def getShelterOccupancy(_id):
-	result = session.query(Puppy, Shelter).join(Shelter).filter(Shelter.id == _id).count()
+	'''
+	This method returns back the capacity in a shelter when a shelter id
+	is entered.
+	'''
+	result = pupAndShelter.join(Shelter).filter(Shelter.id == _id).count()
 	if not result:
 		return "Something strange is going on"	
 	return result
 
-#method to get the capacity in a shelter.
+# Method returns the capacity in a shelter.
 def getShelterCap(_id):
+	'''
+	Method the capacity in a shelter. Takes in a shelter id.
+	'''
 	result = shelterQuery.filter(Shelter.id == _id).one()
 	if not result:
 		return "Something strange is going on"	
 	return result.max_capacity
 
-#this method use a dictionary to return the id and name of shelter with vacancies. 
+
+# This method use a dictionary to return the id and name of shelter with vacancies. 
 def vacantShelter():
     shelters = session.query(Shelter)
     shelter_id = {}
     for shelter in shelters:
-          if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
+        if(getShelterCap(shelter.id) >= getShelterOccupancy(shelter.id)):   
             shelter_id.update({shelter.id:shelter.name})
     
     return shelter_id
 
-
-#this function is used to set a new user
-def setUser(name, email):
-	user =User(name=name, email=email)
-	session.add(user)
-	session.commit
-
-#Add a pup to find what shelter to put the pup in.
+# Add a pup to find what shelter to put the pup in.
 def addPup(name, gender, dateOfBirth, picture, weight, shelter_id, entered_by):
+	'''
+	Method creates a new puppy object, it uses getDOB
+	to turn a string to a datetime object.
+	'''
 	if(getShelterCap(shelter_id) >= getShelterOccupancy(shelter_id)):
 		dob = getDOB(dateOfBirth)
-		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, picture = picture, shelter_id = shelter_id, weight = weight, entered_by=entered_by)
+		pupToAdd = Puppy(name = name, gender = gender, dateOfBirth = dob, 
+			picture = picture, shelter_id = shelter_id, weight = weight, 
+			entered_by=entered_by)
 		session.add(pupToAdd)
 		session.commit()
 	else:
 		return 'ALL SHELTER ARE FULL'
 
-#Method takes a string format 'YYYY-MM-DD' and returns a date object
+# Create new family
+def newFam(adopter_id, adopter_name, puppy_id, puppy_name, shelter_id, ):
+	'''
+	Method inserts the followiing to the NewFamily table:
+	adopter_id(User.id), adopter_name(User.name), (Puppy.id), (Puppy.name), (Shelter.id)
+	'''
+	newFam = NewFamily(adopter_id = adopter_id,
+		adopter_name = adopter_name, puppy_id = puppy_id,
+		puppy_name = puppy_name, shelter_id = shelter_id)
+	session.add(pupToAdd)
+	session.commit
+
+
+# Method takes a string format 'YYYY-MM-DD' and returns a date object
 def getDOB(dateOfBirth):
+	''' Here in the method I used the datetime module to convert a string to a date
+	    object. This was created because I was not able to insert a string as a date in the database. 
+	'''
 	return date_time.strptime(dateOfBirth, '%Y-%m-%d')
