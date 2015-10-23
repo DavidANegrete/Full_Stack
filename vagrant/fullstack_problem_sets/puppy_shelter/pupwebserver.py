@@ -204,12 +204,11 @@ def gconnect():
     flash('You are nog logged in!')
     return render_template('pupshome.html')
 
-# Creates a new user if called 
+# Creates a new user if called and returns the new users id
 def createUser(login_session):
-    name = login_session['username']
-    email = login_session['email']
-    picture=login_session['picture']
-    newUser = User(name, email, picture)
+    newUser = User(name = login_session['username'],
+                    email = login_session['email'],
+                    picture=login_session['picture'])
     session.add(newUser)
     session.commit()
     user = userQuery.filter_by(email=login_session['email']).one()
@@ -367,9 +366,9 @@ def pupsAdopt(pup_id):
         shelter_id = pup.shelter_id
         adopter_name = login_session['username']
         puppy_name = pup.name
-        newfam = NewFamily(adopter_id=adopter_id, puppy_id=puppy_id,
-        shelter_id=shelter_id,adopter_name=adopter_name,
-        puppy_name=puppy_name)
+        newfam = NewFamily(adopter_id = adopter_id, puppy_id = puppy_id,
+                            shelter_id = shelter_id,adopter_name = adopter_name,
+                            puppy_name = puppy_name)
         session.add(newfam)
         session.commit()
 
@@ -485,9 +484,8 @@ def pupsDelete(pup_id):
         flash('Not authorized to delete a pup you did not enter in the system.')
         return render_template('pupshome.html')
 
-    # checking to see if the user is logged in
+    # checking to see if the creator is the deleter
     if getUserID(login_session['email']) == pupToDelete.entered_by:
-        print 'authorized to remove'    
         if request.method == 'POST':
             if pupToDelete.name.lower() == request.form['name'].strip().lower(): 
                 session.delete(pupToDelete)

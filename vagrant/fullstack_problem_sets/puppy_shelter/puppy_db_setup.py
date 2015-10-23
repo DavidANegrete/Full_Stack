@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Date, Numeric
+from sqlalchemy import Column, ForeignKey, Integer, String, Date, Numeric, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -42,7 +42,8 @@ class Puppy(Base):
     entered_by = Column(Integer, ForeignKey('user.id'))
     shelter = relationship(Shelter)
     user = relationship(User)
-    weight = Column(Numeric(10))
+    weight = Column(Integer)
+    adopted = Column(Boolean, nullable=False, default=False)
 
     @property
     def serialize(self):

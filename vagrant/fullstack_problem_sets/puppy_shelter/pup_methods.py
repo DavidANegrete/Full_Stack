@@ -20,6 +20,7 @@ shelterQuery = session.query(Shelter)
 
 pupAndShelter = session.query(Puppy, Shelter)
 
+
 def getPupsAll():
 	return pupQuery.all()
 

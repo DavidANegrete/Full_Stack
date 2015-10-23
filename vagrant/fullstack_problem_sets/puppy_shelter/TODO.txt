@@ -4,18 +4,19 @@ Product back log: puppy_shelter
 
 
 1. on 488 correct the note to read "checking to see if item's owner matches with the user who is trying to delete it"
-----Fibonacci(1)
+----Fibonacci(Completed 10/21)
 
 2. Code Quality
 	Indentation in lines 371 and 372 should be under "adopter",
 	newfam = NewFamily(adopter_id=adopter_id,
 						puppy_id=puppy_id, shelter_id=shelter_id, adopter_name=adopter_name, puppy_name=puppy_name)
-----Fibonacci(2)
-3. fix create user method it has a progammatic error. 
+----Fibonacci(Completed 10/21)
+
+3. fix createUser method it has a progammatic error. 
 	- change to key value pairs (
 	newUser = User(name=name, email=email, picture=picture)
 	)
-----Fibonacci(3)
+----Fibonacci(Completed 10/23)
 
 5. Methods need notes scrub the page and correct as needed.
 ----Fibonacci(5)
@@ -23,7 +24,7 @@ Product back log: puppy_shelter
 ----Fibonacci(8)
 
 6. Add a new boolean to indicate a pup was adopted and leave him or her on the db. 
-----Fibonacci(13)
+----Fibonacci(Completed 10/23)
 
 22 points
 
