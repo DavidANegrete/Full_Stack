@@ -16,7 +16,7 @@
     <br>
     <h5>You are in the process of editing {{pup.name}}'s information.</h5>
     <br>
-    <form name='edit' method='post' action= "{{url_for('pupsEdit', pup_id = pup.id)}} " id = "edit">
+    <form name='edit' method='post' action= "{{url_for('pupsEdit', pup_id = pup.id)}} " id = "edit"  enctype="multipart/form-data">
     	<div class="form-group">
     		<label for="name">Pup Name: {{pup.name}}</label>
     		<input type="text" class="form-control" id="name" name="name" minlength ="2" placeholder="Edit Name">
@@ -43,6 +43,11 @@
   <div class="form-group">
   	<label for='weight'>Pup weight: </label><br>
   	<input type='number' name='weight' id='weight' value='{{pup.weight}}'/>  					
+  </div>
+
+  <div class="form-group">
+    <label for='file'>Picture</label><br>
+    <input type='file' name='file' id='file'/>            
   </div>
 
   <hr>

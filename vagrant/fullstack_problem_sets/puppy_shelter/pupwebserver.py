@@ -408,7 +408,7 @@ def pupsRehome():
         dateOfBirth = kwargs['dateOfBirth']
         file = request.files['file']
         if not file:
-            picture = '/static/images/uploads/'
+            picture = '/static/images/no-image.jpg'
         weight = kwargs['weight']
         shelter_id = kwargs['shelter']
         entered_by=getUserID(login_session['email'])
@@ -416,6 +416,7 @@ def pupsRehome():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             picture = show(filename)
+        print picture
 
 
 
@@ -458,6 +459,13 @@ def pupsEdit(pup_id):
             dob = getDOB(request.form['dateOfBirth'])
             if dob:
                 pupToEdit.dateOfBirth = dob
+        
+        # Checking if a different image was selected.
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            # Add the removal of the file from the server
+            
         if request.form['weight'] != pupToEdit.weight:
             weight = request.form['weight']
             if weight:

@@ -1,0 +1,19 @@
+Back Log work completed:
+
+1. on 488 correct the note to read "checking to see if item's owner matches with the user who is trying to delete it"
+----Fibonacci(Completed 10/21)
+
+2. Code Quality
+	Indentation in lines 371 and 372 should be under "adopter",
+	newfam = NewFamily(adopter_id=adopter_id,
+						puppy_id=puppy_id, shelter_id=shelter_id, adopter_name=adopter_name, puppy_name=puppy_name)
+----Fibonacci(Completed 10/21)
+
+3. fix createUser method it has a progammatic error. 
+	- change to key value pairs (
+	newUser = User(name=name, email=email, picture=picture)
+	)
+----Fibonacci(Completed 10/23)
+
+6. Add a new boolean columns on the db to indicate a pup was adopted and leave him or her on the db. 
+----Fibonacci(Completed 10/23)
