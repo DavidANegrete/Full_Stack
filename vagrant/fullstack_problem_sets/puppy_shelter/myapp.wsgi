@@ -1,20 +1,10 @@
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask import redirect 
-from flask import url_for
-from flask import flash
-from flask import jsonify
-from flask import session as login_session
-from sqlalchemy import create_engine
-from sqlalchemy import and_
+from flask import Flask, render_template, request, redirect 
+from flask import url_for, flash, jsonify
+from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
-from puppy_db_setup import Base 
-from puppy_db_setup import Puppy 
-from puppy_db_setup import Shelter 
-from puppy_db_setup import User
-from puppy_db_setup import UserAndPuppy 
-from puppy_db_setup import NewFamily
+from puppy_db_setup import Base, Shelter, Puppy,User 
+from puppy_db_setup import UserAndPuppy, User, NewFamily
+from flask import session as login_session
 from werkzeug import secure_filename
 from functools import wraps
 import os
@@ -516,6 +506,6 @@ def pupsDelete(pup_id):
     return render_template('pupsdelete.html', pup_id = pup_id, puppy = pupToDelete)
 
 if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
+    #app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run()
