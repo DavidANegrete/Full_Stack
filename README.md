@@ -12,7 +12,7 @@ and used Python (2.7.6) as the server side programming language.
 Within the /vagrant directory in this repo you will find a VagrantFile that 
 can be used to deploy the work, a shell script that configures the enviorment and 
 each project. The projects are in their own directory, numbered from P1 to P5. 
-Included in each project directory is a README.md with project specific
+Included in each project directory is a README.md file with project specific
 details and instructions on deploying.
 
 
