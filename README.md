@@ -17,7 +17,7 @@ details and instructions on deploying.
 
 
 ##Overview
-A brief overview can be found below to get an idea of work completed
+A brief overview can be found below to get an idea of the work completed
 for each project.
 
 ###/P1
