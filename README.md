@@ -17,28 +17,28 @@ details and instructions on deploying.
 
 
 ##Project Overview
-####P1
+###P1
 Includes server-server side code in Python that is used to store a list of 
 movies including box art imagery and a movie trailer URL. 
 
-####P2
+###P2
 This project uses the PostgreSQL database to keep track of players and 
 matches in a game tournament. The game tournament uses a Swiss system for 
 pairing up players in each round.
 
-####P3
+###P3
 This application provides a list of unique items (pups) within a variety of 
 categories (shelters) included is a user registration and authentication 
 system. Signed in and out Users have different permissions based on their 
 current states.
 
-####P4
+###P4
 In this project I developed a cloud-based API server to support a provided 
 [Conference Organization](https://github.com/udacity/ud858/tree/master/ConferenceCentral_Complete) application that exists on the web. The API supports the following functionality, within 
 Google App Engine: user authentication, user profiles, conference information
 and various methods to query the conference data.
 
-####P5
+###P5
 Took a baseline installation of a Linux distribution on a virtual machine 
 and prepared it to host my own web application (P3). This project had me 
 install updates, secure the application from a number of attack vectors, 
