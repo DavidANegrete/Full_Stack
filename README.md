@@ -18,7 +18,7 @@ details and instructions on deploying.
 
 ##Overview
 A brief overview can be found below to get an idea of work completed
-to complete each project.
+for each project.
 
 ###/P1
 Created server-server side code in Python and used it to store a list of 
