@@ -11,38 +11,42 @@ and used Python (2.7.6) as the server side programming language.
 ##Files found within
 Within the /vagrant directory in this repo you will find a VagrantFile that 
 can be used to deploy the work, a shell script that configures the enviorment and 
-aach project. The project are in their own directory from P1 to P5. Include in each
-project directory a README.md file can also be found along with project specific
+each project. The projects are in their own directory, numbered from P1 to P5. 
+Include in each project directory a README.md file is found with project specific
 details and instructions on deploying.
 
 
-##Project Overview
-###P1
-Includes server-server side code in Python that is used to store a list of 
-movies including box art imagery and a movie trailer URL. 
+##Overview
+A brief overview can be found below to get an idea of work completed
+to complete each project.
 
-###P2
-This project uses the PostgreSQL database to keep track of players and 
-matches in a game tournament. The game tournament uses a Swiss system for 
-pairing up players in each round.
+###/P1
+Created server-server side code in Python and used it to store a list of 
+movies including box art imagery and a movie trailer URL. This information
+was then served using webpage.
 
-###P3
-This application provides a list of unique items (pups) within a variety of 
-categories (shelters) included is a user registration and authentication 
-system. Signed in and out Users have different permissions based on their 
-current states.
+###/P2
+This project used a PostgreSQL database to keep track of players and 
+matches in a tournament. The tournament used a Swiss system for pairing 
+up players in each round.
 
-###P4
-In this project I developed a cloud-based API server to support a provided 
-[Conference Organization](https://github.com/udacity/ud858/tree/master/ConferenceCentral_Complete) application that exists on the web. The API supports the following functionality, within 
-Google App Engine: user authentication, user profiles, conference information
-and various methods to query the conference data.
+###/P3
+This application provided a list of unique items (pups) within a variety of 
+categories (shelters). For this application a user registration and authentication 
+system was created. Views on the app are served based on the current users state
+(Signed in/Out). SQL Alchemy was used for CRUD functionality, also used was Flask to 
+build the views, serve the data and serve user instances. 
 
-###P5
-Took a baseline installation of a Linux distribution on a virtual machine 
-and prepared it to host my own web application (P3). This project had me 
-install updates, secure the application from a number of attack vectors, 
-lastly installed and configured web and database servers.
+###/P4
+For this project a cloud-based API server was created to support a provided 
+[Conference Organization](https://github.com/udacity/ud858/tree/master/ConferenceCentral_Complete) application on the web. The Google App Engine API supports the followin: user authentication, user profiles,
+conference informationand various methods to query conference data.
+
+###/P5
+From a baseline installation of a Linux distribution on a virtual machine 
+and I configured it to host my own web application (P3). For This project  
+I created users, installed updates, secured the application from a number of attack vectors, 
+and also configured both web and database servers on it. 
 
 
 ##Downloading and Deploying
