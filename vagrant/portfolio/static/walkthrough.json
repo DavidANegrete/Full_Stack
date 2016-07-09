@@ -1,0 +1,48 @@
+[{
+  "name": "Learning Udacity Feedback",
+  "code": "You made it!",
+  "tests": [
+    {
+      "description": "Test 1 has correct bg color",
+      "definition": {
+        "nodes": ".test1",
+        "cssProperty": "backgroundColor",
+        "equals": "rgb(204, 204, 255)"
+      }
+    },
+    {
+      "description": "Test 2 says 'Hello, world!'",
+      "definition": {
+        "nodes": ".test2",
+        "get": "innerHTML",
+        "hasSubstring": "^Hello, world!$"
+      }
+    },
+    {
+      "description": "Test 3 has larger columns",
+      "definition": {
+        "nodes": ".test3",
+        "cssProperty": "width",
+        "isGreaterThan": 159
+      }
+    },
+    {
+      "description": "Test 4 has two columns",
+      "definition": {
+        "nodes": ".test4",
+        "get": "count",
+        "equals": 2
+      }
+    },
+    {
+      "description": "Test 5 has been dispatched",
+      "definition": {
+        "waitForEvent": "ud-test",
+        "exists": true
+      },
+      "flags": {
+        "noRepeat": true
+      }
+    }
+  ]
+}]

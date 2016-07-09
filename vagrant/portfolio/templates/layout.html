@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{% block title %}Portfolio |{% endblock %}</title>
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300' rel='stylesheet' type='text/css'>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <!-- Custom styles for this template -->
+    <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='styles.css') }}'>
+
+  
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 nav-logo">
+          <img class="img-responsive logo" src="/static/images/udacity-logo.png" alt="Udacity logo">
+        </div>
+        <div class="col-md-10 text-right nav-text">
+          <h1 class="name">David A Negrete</h1>
+          <h4 class="title">Full Stack Developer</h4>
+        </div>
+      </div>
+      <hr class="heading-break">
+      <div class="row">
+        <div class="col-md-12">
+          <img class="img-responsive main-img" src="/static/images/programming.jpeg" alt="Coding is what I do">
+        </div>
+      </div>
+      <div class="row">
+        <div class="page-header">
+          <h1 class="portfolio-head">Featured Work <small>Python</small></h1>
+        </div>
+        <div class="col-md-3 ">
+          <img class="img-responsive gallery-img" src="/static/images/movie-trailer.jpeg" alt="Coding is what I do">   
+          <h4>Movie Trailer Website</h4>
+          <p>This is a basic static website that is served with a provided template. It is written in Python. The HTML and CSS was provided by Udacity.</p>
+          <p><bold>GitHub Repository</bold></p>
+        </div>
+       
+
+
+      <!-- End Of Body -->
+   </div>
+      <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+   
+  </body>
+</html>
