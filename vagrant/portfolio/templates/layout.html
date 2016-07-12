@@ -2,45 +2,103 @@
 <html>
   <head>
     <title>{% block title %}Portfolio |{% endblock %}</title>
+    <meta name="viewport" content="width-device-width">
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300' rel='stylesheet' type='text/css'>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-        <!-- Optional theme -->
+    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-        <!-- Custom styles for this template -->
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <!-- Custom styles for this template -->
     <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='styles.css') }}'>
 
   
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-2 nav-logo">
+
+
+    <!-- Used two containers in this layout -->
+    {% block nav %}
+    <div class="container nav">
+        <header class="nav-head">
           <img class="img-responsive logo" src="/static/images/udacity-logo.png" alt="Udacity logo">
-        </div>
-        <div class="col-md-10 text-right nav-text">
           <h1 class="name">David A Negrete</h1>
           <h4 class="title">Full Stack Developer</h4>
-        </div>
-      </div>
+        </header>
+    </div>
+    {% endblock %}
+    
+    <div class="container main-container">
       <hr class="heading-break">
-      <div class="row">
-        <div class="col-md-12">
-          <img class="img-responsive main-img" src="/static/images/programming.jpeg" alt="Coding is what I do">
+      <article>
+        <header>
+          <div class="row">
+            <div class="col-md-12">
+              <img class="img-responsive main-img" src="/static/images/programming.jpeg" alt="Coding is what I do and love.">
+            </div>
+          </div>
+        </header>
+        <section>
+          <div class="page-header row">
+            <h1 class="portfolio-head">Featured Work <small>Python</small></h1>
+          </div>
+          <div class="col-md-3 gal-item">
+            <h4 class="gallery-text head-text">Movie Trailer Website</h4>
+            <img class="img-responsive gallery-img" src="/static/images/movie-trailer.jpeg" alt="Coding is what I do">   
+            <p class="gallery-text gallery-paragraph">This is a basic static website that is served with a provided template. It is written in Python. The HTML and CSS was provided by Udacity.</p>
+            <p class="gallery-text gallery-paragraph ">GitHub: <a href="https://github.com/DavidANegrete" class="repo-tag"> /DavidANegrete </a><a href="https://github.com/DavidANegrete/Full_Stack" class="repo-tag"> /Full_Stack </a><a href="https://github.com/DavidANegrete/Full_Stack/tree/master/vagrant/movie_trailer" class="repo-tag"> /movie_trailer</a></p>
+          </div>
+        <div class="col-md-3 gal-item">
+          <h4 class="gallery-text head-text">Porfolio</h4>
+          <img class="img-responsive gallery-img" src="/static/images/portfolio.jpeg" alt="Coding is what I do">   
+          <p class="gallery-text gallery-paragraph">For this project I was provided with a mockup of the desktop layout and I took that and created a responsive website using twitter bootstrap to provide a default structure, it is served using Flask</p>
+          <p class="gallery-text gallery-paragraph">GitHub: <a href="https://github.com/DavidANegrete" class="repo-tag"> /DavidANegrete</a><a href="https://github.com/DavidANegrete/Full_Stack" class="repo-tag"> /Full_Stack</a><a href="https://github.com/DavidANegrete/Full_Stack/tree/master/vagrant/portfolio" class="repo-tag"> /porfolio</a></p>
         </div>
-      </div>
-      <div class="row">
-        <div class="page-header">
-          <h1 class="portfolio-head">Featured Work <small>Python</small></h1>
+                <div class="col-md-3 gal-item">
+          <h4 class="gallery-text head-text">Multi User Blog</h4>
+          <img class="img-responsive gallery-img" src="/static/images/blog.jpeg" alt="Coding is what I do">   
+          <p class="gallery-text gallery-paragraph">For this project I created a multi user blog where users can sign in and post blog posts and 'like' and 'Comment' on other posts made on the blog. Additionaly an authentication system was created. This project is hosted using Google App Engine</p>
+          <p class="gallery-text gallery-paragraph">GitHub: <a href="https://github.com/DavidANegrete" class="repo-tag"> /DavidANegrete</a><a href="https://github.com/DavidANegrete/Full_Stack" class="repo-tag"> /Full_Stack</a><a href="https://github.com/DavidANegrete/Full_Stack/tree/master/vagrant/blog" class="repo-tag"> /blog</a></p>
         </div>
-        <div class="col-md-3 ">
-          <img class="img-responsive gallery-img" src="/static/images/movie-trailer.jpeg" alt="Coding is what I do">   
-          <h4>Movie Trailer Website</h4>
-          <p>This is a basic static website that is served with a provided template. It is written in Python. The HTML and CSS was provided by Udacity.</p>
-          <p><bold>GitHub Repository</bold></p>
+        <div class="col-md-3 gal-item">
+          <h4 class="gallery-text head-text">Tournament Results</h4>
+          <img class="img-responsive gallery-img" src="/static/images/tournament.png" alt="Coding is what I do">   
+          <p class="gallery-text gallery-paragraph">I develop database schema to store game matches between players. I wrote code to query the data and determine the winners of various games.</p>
+          <p class="gallery-text gallery-paragraph">GitHub: <a href="https://github.com/DavidANegrete" class="repo-tag"> /DavidANegrete</a><a href="https://github.com/DavidANegrete/Full_Stack" class="repo-tag"> /Full_Stack</a><a href="http://github.com/DavidANegrete/Full_Stack/tree/master/vagrant/tournament" class="repo-tag"> /tournament</a></p>
         </div>
-       
+        <div class="col-md-3 gal-item">
+          <h4 class="gallery-text head-text">Item Catalog</h4>
+          <img class="img-responsive gallery-img" src="/static/images/catalog.jpg" alt="Coding is what I do">   
+          <p class="gallery-text gallery-paragraph">For this project I created a way for the users of my page to add animal shelters on my application, add a pet in a shelter or adopt one. Users authenticate using a OATH2 provider. Users are given two options for one they can choose to sign in with a Facebook or Google account. They can view all the pets and options are presented based on whether or not they have an active session going.</p>
+          <p class="gallery-text gallery-paragraph">GitHub: <a href="https://github.com/DavidANegrete" class="repo-tag"> /DavidANegrete</a><a href="https://github.com/DavidANegrete/Full_Stack" class="repo-tag"> /Full_Stack</a><a href="http://github.com/DavidANegrete/Full_Stack/tree/master/vagrant/catalog" class="repo-tag"> /catalog</a></p>
+        </div>
+        <div class="col-md-3 gal-item">
+          <h4 class="gallery-text head-text">Neighboorhood Map</h4>
+          <img class="img-responsive gallery-img" src="/static/images/map.jpeg" alt="Coding is what I do">   
+          <p class="gallery-text gallery-paragraph">For this project I created a single page application featuring a map of my neighboorhood that allows users to leave map markers, use a search function and they are also provided with a list view of all the points of intrest. I used various APIs to complete this project.</p>
+          <p class="gallery-text gallery-paragraph">GitHub: <a href="https://github.com/DavidANegrete" class="repo-tag"> /DavidANegrete</a><a href="https://github.com/DavidANegrete/Full_Stack" class="repo-tag"> /Full_Stack</a><a href="http://github.com/DavidANegrete/Full_Stack/tree/master/vagrant/neighborhood_map" class="repo-tag"> /map</a></p>
+        </div>
+        <div class="col-md-3 gal-item">
+          <h4 class="gallery-text head-text">Design a Game</h4>
+          <img class="img-responsive gallery-img" src="/static/images/api.jpeg" alt="Coding is what I do">   
+          <p class="gallery-text gallery-paragraph">For this project a back-end API was created with endpoints that allows for a front-end to be easily created. DataStore along with the Google App Engine were used to create this project.</p>
+          <p class="gallery-text gallery-paragraph">GitHub: <a href="https://github.com/DavidANegrete" class="repo-tag"> /DavidANegrete</a><a href="https://github.com/DavidANegrete/Full_Stack" class="repo-tag"> /Full_Stack</a><a href="http://github.com/DavidANegrete/Full_Stack/tree/master/vagrant/game_api" class="repo-tag"> /game_api</a></p>
+        </div>
+        <div class="col-md-3 gal-item">
+          <h4 class="gallery-text head-text">Linux Server Configuration</h4>
+          <img class="img-responsive gallery-img" src="/static/images/linux.jpeg" alt="Coding is what I do">   
+          <p class="gallery-text gallery-paragraph">For this project I created a single page application featuring a map of my neighboorhood that allows users to leave map markers, use a search function and they are provided with a list view of all points of intrest. I used various APIs to complete this project.</p>
+          <p class="gallery-text gallery-paragraph">GitHub: <a href="https://github.com/DavidANegrete" class="repo-tag"> /DavidANegrete</a><a href="https://github.com/DavidANegrete/Full_Stack" class="repo-tag"> /Full_Stack</a><a href="http://github.com/DavidANegrete/Full_Stack/tree/master/vagrant/linux" class="repo-tag"> /linux</a></p>
+        </div>
+        </section>
+        <footer>
+          <p class="footer">email:<a href="mailto:davide@gravymobileapplication.com">david@gravymobileapplicationdevelopment.com</a>.</p>
+</footer>
+
+
 
 
       <!-- End Of Body -->
