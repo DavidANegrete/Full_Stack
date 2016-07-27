@@ -1,92 +1,228 @@
-body {
-	font-family: 'Open Sans', sans-serif;
+*{
+	box-sizing: border-box;
+	ont-family: 'Open Sans', sans-serif;
 }
-a {
-	color: black;
+a{
+	color:black;
+
 }
-.nav,
-.nav-logo,
-.main-container {
-	display: flex;
-	flex-direction: column;
+.container,
+.nav-head,
+.programmer,
+.gal-ban,
+.port-gal,
+.port-gal-item,
+.port-gal-text,
+.port-gal-repo{
+	display:flex;
 }
-.footer{
-	position: relative;
-	left: 12%;
+.container{
+	flex-wrap:wrap;
+	height: 750px;
 }
 .nav-head{
-	
-}
-.logo{
-	position: relative;
-	width: 12.5%;
-	top: 6.5em;
-	margin: auto;
-	right: 40%;
-}
-.portfolio-head{
-	position: relative;
-	left: 5%;
+	flex-direction:row;
+	justify-content:space-around;
+	width: 100%;
+	border-bottom: 1.5px solid black;
 }
 .name,
 .title{
-	position: relative;
+	text-transform: uppercase;
 	font-family: 'Raleway', sans-serif;
-	left:25%;
-
 }
-.gallery-paragraph{
-	position: relative;
+.title{
+	margin-left: auto;
 }
-.head-text{
-	font-weight: bold;
-	font-size: 1.5em;
+.logo{
+	margin-right: auto;
+	padding-bottom: .5em;
+	padding-top: .5em;
+	width: 15%;
+	height: 15%;
 }
-.gallery-paragraph{
-	position: relative;
-	font-family: 'Ubunt', sans-serif;;
-}
-.container{
-	position: relative;
-}
-.repo-tag{
-	width: 300px;
-    margin: auto;
-    border: .03em solid #f2f2f2;
-}
-a:hover { 
-    background-color: #f2f2f2;
-    color: #737373;
+.programmer{
+	flex-direction:column;
+	justify-content:space-around;
 }
 .main-img{
-		position: relative;
-		width:150%; 	
-	}
-.gallery-img{
-	position: relative;
 	width: 100%;
-	padding: .5em;
+	padding-top: 1.5em;
+}
+.port-gal,
+.gal-ban,
+.port-gal-text,
+.port-gal-repo{
+	flex-direction:row;
+	flex-wrap:wrap;	
+}
+.port-gal-item{
+	flex-wrap:wrap;
+	align-items:center;
+	justify-content:space-around;
+	padding: .05em;
+}
+.port-gal-text{
+	margin: auto;
+}
+.port-gal-img{
+   padding:1px;
+   border:1px solid black;
+   background-color:#fff;
+}
+
+.gallery-paragraph{
+	width: 85%;
+	align-items:center;
+	padding-top: 1em;
+}
+.gal-ban-item{
+	width: 100vw;
+}
+.repo{
+	margin-top: auto;
+
+}
+.repo-head{
+	font-size: 1.25em;
+	}
+.repo{
+	font-size: 1.2em;
+	justify-content:space-around;
+	align-items:flex-start;
+	padding-left: .5em;
+}
+.repo-gal-text{
+	height: 75%;
+}
+.repo-dir,
+.repo-name,
+.repo-tag{
+	background-color: #D2CFCF;
+}
+.repo-name,
+.repo-tag{
+	margin-left: .15em;
+}
+/* 
+	Below you will find media queries for there different viewport widths.
+
+		max-width: 480px
+			target:
+				smaller devices
+			not-displayed:
+				gal-ban-item
+
+		min-width: 481px & max-width: 700px
+			target:
+				med size screen and tablets
+		
+		max-width: 960px
+			target:
+				desktops
+*/
+/* Targeting the 480 viewport to hit most small devices */
+@media (max-width: 480px) {
+	.main-img{
+		display: none;
+	}
+	.logo{
+		height: 20%;
+		width: 20%;
+	}
+	.name{
+		font-size: 2em;		
+	}
+	.title{
+		font-size: 1.25em;
+	}
+	.port-gal-item{
+		width: 95%;
+	}
+	.repo{
+		font-size: 1em;
+	}
+	.port-gal-head{
+		font-size: 1.75em;
+		margin: auto;
+	}
+}
+/* Targetting larger screens up to tablets */
+@media (min-width: 481px) and (max-width: 700px) {
+	.port-gal-item{
+		width: 45vw;
+		align-items: baseline;
+		flex-direction:row;
+		padding-top: 0;
+		justify-content:flex-start;
+		margin: auto;
+	}
+	.port-gal{
+		align-items: baseline;
+		
 	}
 
-/* Media Queries -------------------- */
-
-@media (max-width: 960px) {
-  body {
-    background: royalblue;
-  }
+	.port-gal-img{
+		width: 100%;
+		height: 100%;
+		min-width: 60%;
+		padding:0;
+		margin-top: 0;
+		margin-left: .33em;
+		margin-right: .33em;
+	}
+	.port-gal-desc{
+		font-size: 1em;
+	}
+	.port-gal-text{
+		padding-top: 1em;
+	}
+	.port-gal-repo{
+		margin-top: auto;
+		font-size: 1em;
+	}
+	.repo{
+		margin-top: auto;
+		font-size: 1em;
+	}
+	.port-gal-repo{
+		margin-top: auto;
+		flex-direction:column;
+	}
 }
-
-@media (max-width: 480px) {
-  body {
-    background: darkred;
-  }
+/* Desktop */
+@media (min-width: 700px) and (max-width: 960px) {
+	.port-gal-item{
+		width:33vw;
+		max-width: 24vw;
+		align-items: baseline;
+		flex-direction:row;
+		padding-top: 0;
+		justify-content:space-around;
+		margin: auto;
+	}
+	.port-gal{
+		align-items: baseline;	
+	}
+	.port-gal-text{
+		font-size: 1em;
+	}
+	.port-gal-img{
+		width: 100%;
+		height: 70%;
+		min-width: 20%;
+		padding:0;
+		margin-top: 0;
+		margin-left: .33em;
+		margin-right: .33em;
+	}
+	.container{
+		max-width: 960px;
+	}
+	.repo{
+	font-size: 1em;
+	justify-content:space-around;
+	align-items:flex-start;
+	padding-left: .5em;
 }
-
-@media (min-width: 481px) and (max-width: 700px) {
-  body {
-    background: seagreen;
-  }
-  p {
-    color: white;
-  }
 }
