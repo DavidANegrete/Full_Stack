@@ -1,14 +1,13 @@
-*{
+* {
 	box-sizing: border-box;
 	ont-family: 'Open Sans', sans-serif;
 }
-a{
+a {
 	color:black;
 }
 .container{
 	width: 100%;
 }
-
 .container,
 .nav-head,
 .programmer,
@@ -19,95 +18,94 @@ a{
 .port-gal-repo{
 	display:flex;
 }
-.container{
+.container {
 	flex-wrap:wrap;
 	height: 750px;
 }
-.nav-head{
+.nav-head {
 	flex-direction:row;
 	justify-content:space-around;
 	width: 100%;
 	border-bottom: 1.5px solid black;
 }
 .name,
-.title{
+.title {
 	text-transform: uppercase;
 	font-family: 'Raleway', sans-serif;
 }
-.title{
+.title {
 	margin-left: auto;
 }
-.logo{
+.logo {
 	margin-right: auto;
 	padding-bottom: .5em;
 	padding-top: .5em;
 	width: 15%;
 	height: 15%;
 }
-.programmer{
+.programmer {
 	flex-direction:column;
 	justify-content:space-around;
 }
-.main-img{
+.main-img {
 	width: 100%;
 	padding-top: 1.5em;
 }
 .port-gal,
 .gal-ban,
 .port-gal-text,
-.port-gal-repo{
+.port-gal-repo {
 	flex-direction:row;
 	flex-wrap:wrap;	
 }
-.port-gal-item{
+.port-gal-item {
 	flex-wrap:wrap;
 	align-items:center;
 	justify-content:space-around;
 	padding: .05em;
 }
-.port-gal-text{
+.port-gal-text {
 	margin: auto;
 }
-.port-gal-img{
+.port-gal-img {
    padding:1px;
    border:1px solid black;
    background-color:#fff;
 }
-.gallery-paragraph{
+.gallery-paragraph {
 	width: 85%;
 	align-items:center;
 	padding-top: 1em;
 }
-.gal-ban-item{
+.gal-ban-item {
 	width: 100vw;
 }
-.repo{
+.repo {
 	margin-top: auto;
-
 }
-.repo-head{
+.repo-head {
 	font-size: 1.25em;
 	}
-.repo{
+.repo {
 	font-size: 1.2em;
 	justify-content:space-around;
 	align-items:flex-start;
 	padding-left: .5em;
 }
-.repo-gal-text{
+.repo-gal-text {
 	height: 75%;
 }
 .repo-dir,
 .repo-name,
-.repo-tag{
+.repo-tag {
 	background-color: #D2CFCF;
 }
 .repo-name,
-.repo-tag{
+.repo-tag {
 	margin-left: .15em;
 }
 /* 
-	Below you will find media queries for there different viewport widths.
+	Below you will find media queries for different viewport widths.
 
 		max-width: 480px
 			target:
@@ -125,33 +123,33 @@ a{
 */
 /* Targeting the 480 viewport to hit most small devices */
 @media (max-width: 480px) {
-	.main-img{
+	.main-img {
 		display: none;
 	}
-	.logo{
+	.logo {
 		height: 20%;
 		width: 20%;
 	}
-	.name{
+	.name {
 		font-size: 2em;		
 	}
-	.title{
+	.title {
 		font-size: 1.25em;
 	}
-	.port-gal-item{
+	.port-gal-item {
 		width: 95%;
 	}
-	.repo{
+	.repo {
 		font-size: 1em;
 	}
-	.port-gal-head{
+	.port-gal-head {
 		font-size: 1.75em;
 		margin: auto;
 	}
 }
 /* Targetting larger screens up to tablets */
 @media (min-width: 481px) and (max-width: 700px) {
-	.port-gal-item{
+	.port-gal-item {
 		width: 45vw;
 		align-items: baseline;
 		flex-direction:row;
@@ -159,12 +157,12 @@ a{
 		justify-content:flex-start;
 		margin: auto;
 	}
-	.port-gal{
+	.port-gal {
 		align-items: baseline;
 		
 	}
 
-	.port-gal-img{
+	.port-gal-img {
 		width: 100%;
 		height: 100%;
 		min-width: 60%;
@@ -173,28 +171,28 @@ a{
 		margin-left: .33em;
 		margin-right: .33em;
 	}
-	.port-gal-desc{
+	.port-gal-desc {
 		font-size: 1em;
 	}
-	.port-gal-text{
+	.port-gal-text {
 		padding-top: 1em;
 	}
-	.port-gal-repo{
+	.port-gal-repo {
 		margin-top: auto;
 		font-size: 1em;
 	}
-	.repo{
+	.repo {
 		margin-top: auto;
 		font-size: 1em;
 	}
-	.port-gal-repo{
+	.port-gal-repo {
 		margin-top: auto;
 		flex-direction:column;
 	}
 }
 /* Desktop */
 @media (min-width: 700px) and (max-width: 960px) {
-	.port-gal-item{
+	.port-gal-item {
 		width:33vw;
 		max-width: 24vw;
 		align-items: baseline;
@@ -203,13 +201,13 @@ a{
 		justify-content:space-around;
 		margin: auto;
 	}
-	.port-gal{
+	.port-gal {
 		align-items: baseline;	
 	}
-	.port-gal-text{
+	.port-gal-text {
 		font-size: 1em;
 	}
-	.port-gal-img{
+	.port-gal-img {
 		width: 100%;
 		height: 70%;
 		min-width: 20%;
@@ -218,10 +216,10 @@ a{
 		margin-left: .33em;
 		margin-right: .33em;
 	}
-	.container{
+	.container {
 		max-width: 960px;
 	}
-	.repo{
+	.repo {
 	font-size: 1em;
 	justify-content:space-around;
 	align-items:flex-start;
