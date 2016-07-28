@@ -4,8 +4,11 @@
 }
 a{
 	color:black;
-
 }
+.container{
+	width: 100%;
+}
+
 .container,
 .nav-head,
 .programmer,
@@ -70,7 +73,6 @@ a{
    border:1px solid black;
    background-color:#fff;
 }
-
 .gallery-paragraph{
 	width: 85%;
 	align-items:center;
@@ -224,5 +226,5 @@ a{
 	justify-content:space-around;
 	align-items:flex-start;
 	padding-left: .5em;
-}
+	}
 }

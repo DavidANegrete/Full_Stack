@@ -15,3 +15,8 @@ In this project you will find file directories
 ## Questions or Comments
 Please reach out to me with any questions or comments about this code at:
 david@gravymobiledevelopment.com
+
+def valid_month(month):
+	if month:
+		if cap_month in months:
+			return cap_months
