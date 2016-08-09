@@ -1,0 +1,49 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="sign-up-container">
+	
+	<div class="sign-up-field">
+		<form method="post">
+			<h1 class="sign-up-head">Sign Up</h1>
+			<div class="sign-up-user-name">
+				<label for"username">User Name
+					<input type ="text" name="username" value='{{username}}'>
+				</label>
+				<div class="sign-up-error">
+					{{error_username}}
+				</div>
+			</div>
+			<div class="sign-up-user-password">
+				<label for"password">Password
+					<input type ="password" name="password" value=''>
+				</label>
+				<div class="sign-up-error">
+					{{error_password}}
+				</div>
+			</div>
+			<div class="sign-up-user-password-verify">
+				<label for"password">Confirm Password
+					<input type ="password" name="verify" value=''>
+				</label>
+				<div class="sign-up-error">
+					{{error_password}}
+				</div>
+			</div>
+			<div class="sign-up-user-email">
+				<label for"password">Email
+					<input type ="text" name="email" value='{{email}}'>
+				</label>
+				<div class="sign-up-error">
+					{{error_email}}
+				</div>
+			</div>		
+			<button class="sign-up-error">Sign Up</button>
+
+			</div>
+
+		
+		
+		</form>
+	</div>
+{% endblock %}
