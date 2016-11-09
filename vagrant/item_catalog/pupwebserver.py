@@ -1,20 +1,11 @@
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask import redirect 
-from flask import url_for
-from flask import flash
-from flask import jsonify
+from flask import (Flask, render_template, request, 
+                    redirect, url_for, flash, jsonify)
 from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
-from puppy_db_setup import Base 
-from puppy_db_setup import Puppy 
-from puppy_db_setup import Shelter 
-from puppy_db_setup import User
-from puppy_db_setup import UserAndPuppy 
-from puppy_db_setup import NewFamily
+from puppy_db_setup import (Base, Puppy, Shelter, 
+                            User, UserAndPuppy, NewFamily)
 from werkzeug import secure_filename
 from functools import wraps
 import os
@@ -288,10 +279,43 @@ def pupsInShelterJSON(shelter_id):
     by_shelter = session.query(Puppy).filter_by(shelter_id=shelter_id).all()
     return jsonify(Puppy=[i.serialize for i in by_shelter])
 
+#home
 @app.route('/')
-@app.route('/pups/')
+@app.route('/lostandfoundpets.in/')
 def pups():
+    '''This method renders the home template'''
     return render_template('pupshome.html')
+
+@app.route('/lostandfoundpets.in/about/')
+def about():
+    '''This method renders the about page'''
+    return render_template('about.html')
+
+
+@app.route('/lostandfoundpets.in/lost/<area>')
+def lost(area):
+    '''This method renders the lost page and takes the area variable. 
+    area, represents the side of town where me pet is reported lost, found 
+    or on the Run'''
+    area = 'all'
+    return render_template('lost.html', area=area)
+
+@app.route('/lostandfoundpets.in/found/<area>')
+def found(area):
+    '''This method renders the lost page and takes the area variable. 
+    area, represents the side of town where me pet is reported lost, found 
+    or on the Run'''
+    area = 'all'
+    return render_template('found.html', area=area)
+
+@app.route('/lostandfoundpets.in/on_the_run/<area>')
+def on_the_run(area):
+    '''This method renders the lost page and takes the area variable. 
+    area, represents the side of town where me pet is reported lost, found 
+    or on the Run'''
+    area = 'all'
+    return render_template('on_the_run.html', area=area)
+
 
 # Search for a pup  
 @app.route('/pups/search/', methods=['GET', 'POST'])
