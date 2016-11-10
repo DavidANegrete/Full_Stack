@@ -284,7 +284,7 @@ def pupsInShelterJSON(shelter_id):
 @app.route('/lostandfoundpets.in/')
 def pups():
     '''This method renders the home template'''
-    return render_template('pupshome.html')
+    return render_template('home.html')
 
 @app.route('/lostandfoundpets.in/about/')
 def about():

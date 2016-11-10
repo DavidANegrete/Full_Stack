@@ -3,8 +3,26 @@
 
 
 <!--Page identifier-->
-{%set page = "adopt" %}
+{%set page = "lost" %}
 
  {% block container %}
 <h1>lost {{area}}</h1>
+<div class="card">
+  <img class="card-img-top" src="..." alt="Card image cap">
+  <div class="card-block">
+    <h4 class="card-title">Rosco</h4>
+	   <p class="card-text">He got out of our yard was wearing a purple collar.</p>
+	  <ul class="list-group list-group-flush">
+	    <li class="list-group-item"><bold>Animal Type: </bold>Dog</li>
+	    <li class="list-group-item"><bold>Breed: </bold>Boxer</li>
+	    <li class="list-group-item"><bold>Color: </bold>Brown</li>
+	    <li class="list-group-item"><bold>Gender: </bold>Male</li>
+	    <li class="list-group-item"><bold>Zip Code Lost: </bold>79938</li>
+	  </ul>
+	</div>
+  <div class="card-block">
+    <a href="#" class="card-link">Update</a>
+    <a href="#" class="btn btn-primary">Is Back Home!</a>
+  </div>
+</div>
  {% endblock %}
