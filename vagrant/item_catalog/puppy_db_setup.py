@@ -15,28 +15,31 @@ class User(Base):
     email = Column(String(250), nullable=False)
     picture = Column(String(250))
 
-class Shelter(Base):
+class Pet(Base):
     __tablename__ = 'shelter'
     id = Column(Integer, primary_key = True)
-    name =Column(String(80), nullable = False)
-    address = Column(String(250))
-    city = Column(String(80))
-    state = Column(String(20))
-    zipCode = Column(String(10))
-    website = Column(String)
-    max_capacity = Column(Integer)
-    current_capacity = Column(Integer)
+    name = Column(String(80), nullable = False)
+    
+    animal_type = Column(String(80), nullable = False)
+    breed = Column(String(80), nullable = False)
+    color = Column(String(80), nullable = False)
+    gender = Column(String(8))
+    zipCode = Column(String(8))
 
     @property
     def serialize(self):
-        return {'id': self.id,'name': self.name,}
+        return {
+        'id': self.id,
+        'name': self.name,
+        'animal_type': self.animal_type,
+        'breed': self.breed,
+        'zipCode': self.zipCode}
 
-class Puppy(Base):
-    __tablename__ = 'puppy'
+class Status(Base):
+    __tablename__ = 'status'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-    gender = Column(String(6), nullable = False)
-    dateOfBirth = Column(Date)
+    is_lost = Column(String(250), nullable=False)
+    is_found = Column(String(6), nullable = False)
     picture = Column(String)
     shelter_id = Column(Integer, ForeignKey('shelter.id'))
     entered_by = Column(Integer, ForeignKey('user.id'))
