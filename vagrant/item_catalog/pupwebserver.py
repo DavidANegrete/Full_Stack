@@ -4,8 +4,7 @@ from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
-from puppy_db_setup import (Base, Puppy, Shelter, 
-                            User, UserAndPuppy, NewFamily)
+from puppy_db_setup import Base, Pet, Status, User
 from werkzeug import secure_filename
 from functools import wraps
 import os
@@ -17,7 +16,6 @@ import httplib2
 import json
 from flask import make_response
 import requests
-from pup_methods import *
 import logging
 
 # Constants for uploads
@@ -35,17 +33,16 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Pups in the City"
 
 # Connect to the Database and session
-engine = create_engine('sqlite:///puppyshelterwithusers.db')
+engine = create_engine('sqlite:///lostandfoundpets.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind = engine)
 session = DBSession()
 
 # Session variables for querys
-pupQuery = session.query(Puppy)
-shelterQuery = session.query(Shelter)
+petQuery = session.query(Pet)
 userQuery = session.query(User)
-queryPupnShelter = session.query(Puppy, Shelter)
+
 
 # Decorator function to keep views accisible by some only.
 def logInDecorator(f):
