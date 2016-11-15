@@ -9,37 +9,41 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'user'
-
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
-    picture = Column(String(250))
+    
 
 class Pet(Base):
+    ''' Represents a pet that is either lost or found'''
     __tablename__ = 'pet'
     id = Column(Integer, primary_key = True)
-    name = Column(String(80), nullable = False)
     animal_type = Column(String(80), nullable = False)
-    breed = Column(String(80), nullable = False)
-    color = Column(String(80), nullable = False)
+    description = Column(String(250), nullable = True)
+    breed = Column(String(80), nullable = True)
     gender = Column(String(8))
-    zipCode = Column(String(8))
+    name = Column(String(80), nullable = True)
+    picture = Column(String(250), nullable = False)
+    zipcode = Column(String(8), nullable = False)
 
     @property
     def serialize(self):
         return {
         'id': self.id,
-        'name': self.name,
         'animal_type': self.animal_type,
         'breed': self.breed,
+        'name': self.name,
         'zipCode': self.zipCode}
 
 class Status(Base):
+    ''' This class represents a pets given status as either
+    lost found or on_the_run. Their are two foreign key relationships 
+    one between pet.id and the other user.id.'''
     __tablename__ = 'status'
     id = Column(Integer, primary_key=True)
     is_lost = Column(Boolean, unique=False, default=False)
     is_found = Column(Boolean, unique=False, default=False)
-    is_on_the_run = Column(Boolean, unique=False, default=False)
+    on_the_run = Column(Boolean, unique=False, default=False)
     pet_id = Column(Integer, ForeignKey('pet.id'))
     entered_by = Column(Integer, ForeignKey('user.id'))
     pet = relationship(Pet)
