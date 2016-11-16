@@ -20,8 +20,7 @@ body {
   color: #b6b3c7;
   text-shadow: 2px 2px 4px #000000;
 }
-login{
-  background-color:#B5B6B3;
+
 }
 #iobutton{
   margin-bottom: 6px;
@@ -90,13 +89,5 @@ login{
   }
 }
 
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
-  .masthead,
-  .marketing,
-  .footer {
-    padding-right: 0;
-    padding-left: 0;
-  }
+
 }

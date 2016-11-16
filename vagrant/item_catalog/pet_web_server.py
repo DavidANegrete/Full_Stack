@@ -4,7 +4,7 @@ from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
-from puppy_db_setup import Base, Pet, Status, User
+from pet_db_setup import Base, Pet, Status, User
 from werkzeug import secure_filename
 from functools import wraps
 import os
@@ -295,7 +295,8 @@ def lost(area):
     area, represents the side of town where me pet is reported lost, found 
     or on the Run'''
     area = 'all'
-    return render_template('lost.html', area=area)
+    pets = session.query(Pet).all()
+    return render_template('lost.html', area=area, pets=pets)
 
 @app.route('/lostandfoundpets.in/found/<area>')
 def found(area):
