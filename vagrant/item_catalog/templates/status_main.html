@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+{% block title %}Pups Adopt{% endblock %}
+<!--Page main -->
+{% set page_id = "post" %}
+
+
+{% block container %}
+<div class="container">
+	<a class="btn btn-outline-success" href='{{url_for('post', area=area, status=status)}}'>Post to Page</a>
+	<div class="row">
+  		<div class="col-md-6">{{status}} {{area}}</div>
+	</div>
+
+</div>
+
+{% endblock %}

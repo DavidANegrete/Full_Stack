@@ -1,0 +1,59 @@
+{% extends "main.html" %}
+{% block title %}Post{% endblock %}
+
+
+{% block container %}
+<h1>Posting a {{status}} pet</h1>
+<div class="container ">
+	<div class="jumbotron">
+		<div class="input-group">
+			<input type="text" class="form-control form-control-lg" placeholder="Pet Name" aria-describedby="basic-addon1">
+		</div>
+	    <div class="input-group">
+		  <input type="text" class="form-control form-control-lg" placeholder="Animal Type" aria-describedby="basic-addon1">
+		</div>
+	    <div class="input-group">
+		  <input type="text" class="form-control form-control-lg" placeholder="Breed" aria-describedby="basic-addon1">
+		</div>
+		<div class="input-group">
+		  <input type="text" class="form-control form-control-lg" placeholder="Color" aria-describedby="basic-addon1">
+		</div>
+		<div class="form-group">
+			<label for="gender" >Male or Female</label><br>
+			  	<select name='gender'>
+				    <option value='either' default>Unknown</option>
+					<option value='male'>Male</option>
+					<option value='female'>Female</option>
+				</select>
+		</div>
+		<hr class="my-2">
+		<div class="input-group">
+		  <input type="text" class="form-control form-control-lg" placeholder="Address" aria-describedby="basic-addon1">
+		</div>
+		<div class="input-group">
+		  <input type="text" class="form-control form-control-lg" placeholder="Zip Code" aria-describedby="basic-addon1">
+		</div>
+		<div class="input-group">
+		  <textarea type="" class="form-control form-control-lg" placeholder="Description" aria-describedby="basic-addon1"></textarea>
+		</div>
+		<hr class="my-2">
+		<div class="form-group">
+		    <label for="exampleInputFile">Picture</label>
+		    <input type="file" id="exampleInputFile">
+		    <p class="help-block">All images must follow our page rules</p>
+		 </div>
+		<hr class="my-2">
+		<div class="well well-lg">
+			<h1 class="display-4">Run an Ad on it!</h1>
+			<div class="checkbox">
+			    <label>
+			      <input type="checkbox"> Reach people that live five miles from where this pet was {{status}} and any friends that they have have in that area. 
+			    </label>
+  			</div>
+		</div>
+	</div>		
+</div>
+	<button type="button" class="btn btn-primary btn-lg btn-block">Post to the Page</button>
+</div>
+
+{% endblock %}

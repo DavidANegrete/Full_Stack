@@ -53,15 +53,17 @@ def logInDecorator(f):
         return f(*args, **kwds)
     return wrapper
 
-
 # Create anti-forgery state token
 @app.route('/login')
 def showLogin():
+    ''' this method creates a state variable that will be 32 characters logging
+    Andy mix of upper case letters and digits. This method protects from cross site 
+    attack anti-forgery'''
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
     # return "The current session state is %s" % login_session['state']
-    return render_template('login.html', STATE = state)
+    return render_template('login.html', STATE=state)
 
 
 # FB - loggin
@@ -200,7 +202,7 @@ def gconnect():
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
     flash('You are nog logged in!')
-    return render_template('pupshome.html')
+    return render_template('home.html')
 
 # Creates a new user if called and returns the new users id
 def createUser(login_session):
@@ -242,10 +244,10 @@ def disconnect():
         del login_session['user_id']
         del login_session['provider']
         flash("You have successfully been logged out.")
-        return redirect(url_for('pups', control_notice='true'))
+        return redirect(url_for('home', control_notice='true'))
     else:
         flash("You were not logged in")
-        return redirect(url_for('pups',control_notice=notice, error='true'))
+        return redirect(url_for('home', control_notice=notice, error='true'))
 
 # DISCONNECTING  - Revoking the current user's token and reset the login_session
 @app.route('/gdisconnect')
@@ -279,7 +281,7 @@ def pupsInShelterJSON(shelter_id):
 #home
 @app.route('/')
 @app.route('/lostandfoundpets.in/')
-def pups():
+def home():
     '''This method renders the home template'''
     return render_template('home.html')
 
@@ -289,31 +291,22 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/lostandfoundpets.in/lost/<area>')
-def lost(area):
+@app.route('/lostandfoundpets.in/<status>/<area>')
+def status(area, status):
     '''This method renders the lost page and takes the area variable. 
     area, represents the side of town where me pet is reported lost, found 
     or on the Run'''
-    area = 'all'
-    pets = session.query(Pet).all()
-    return render_template('lost.html', area=area, pets=pets)
+    pets = session.query(Pet).filter(Status.is_lost==True).all()
+    return render_template('status_main.html', status=status, area=area)
 
-@app.route('/lostandfoundpets.in/found/<area>')
-def found(area):
+@app.route('/lostandfoundpets.in/<status>/<area>/post', methods=['GET', 'POST'])
+@logInDecorator
+def post(area, status):
     '''This method renders the lost page and takes the area variable. 
     area, represents the side of town where me pet is reported lost, found 
     or on the Run'''
-    area = 'all'
-    return render_template('found.html', area=area)
 
-@app.route('/lostandfoundpets.in/on_the_run/<area>')
-def on_the_run(area):
-    '''This method renders the lost page and takes the area variable. 
-    area, represents the side of town where me pet is reported lost, found 
-    or on the Run'''
-    area = 'all'
-    return render_template('on_the_run.html', area=area)
-
+    return render_template('post.html', status=status, area=area)
 
 # Search for a pup  
 @app.route('/pups/search/', methods=['GET', 'POST'])
