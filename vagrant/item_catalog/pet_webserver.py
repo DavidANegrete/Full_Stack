@@ -33,7 +33,7 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Pups in the City"
 
 # Connect to the Database and session
-engine = create_engine('sqlite:///lostandfoundpets.db')
+engine = create_engine('sqlite:///lostandfoundpets.db', echo=True)
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind = engine)
@@ -296,20 +296,31 @@ def status(area, status):
     '''This method renders the lost page and takes the area variable. 
     area, represents the side of town where me pet is reported lost, found 
     or on the Run'''
-    pets = session.query(Pet).filter(Status.is_lost==True).all()
-    return render_template('status_main.html', status=status, area=area)
+    pet_status = status
+    pets = session.query(Pet).all()
+    status = session.query(Status).all()
 
-@app.route('/lostandfoundpets.in/<status>/<area>/post', methods=['GET', 'POST'])
-@logInDecorator
-def post(area, status):
+    return render_template('status_main.html', status=status, area=area, pets=pets)
+
+@app.route('/lostandfoundpets.in/<pet_status>/post', methods=['GET', 'POST'])
+
+def post(pet_status):
     '''This method renders the lost page and takes the area variable. 
     area, represents the side of town where me pet is reported lost, found 
     or on the Run'''
 
-    return render_template('post.html', status=status, area=area)
+
+    return render_template('post.html', pet_status=pet_status)
+
+@app.route('/lostandfoundpets.in/<pet_status>/confirmation')
+def confirmed(pet_status):
+    '''This method renders the renders a confirmation screen so that users 
+    know that they posted to the page.'''
+
+    return render_template('confirmed.html', pet_status=pet_status)
 
 # Search for a pup  
-@app.route('/pups/search/', methods=['GET', 'POST'])
+'''@app.route('/pups/search/', methods=['GET', 'POST'])
 def pupsSearch():
     if request.method == 'POST':
         startDate= ''
@@ -454,21 +465,18 @@ def pupsRehome():
         flash( name + ' has been added hopefully he gets adopted soon.')
         return render_template('pupshome.html')
 
-    return render_template('pupsrehome.html', shelters=vac_shelters)
+    return render_template('pupsrehome.html', shelters=vac_shelters)'''
 
-@app.route('/pups/edit/<int:pup_id>/', methods=['GET', 'POST'])
-@logInDecorator
-def pupsEdit(pup_id):
-    pupToEdit = pupQuery.filter_by(id=pup_id).one()
+@app.route('/lostandfoundpets.in/edit/<pet_id>/<pet_status>', methods=['GET', 'POST'])
+
+def pet_edit(pet_id, pet_status):
+    petToEdit = petQuery.filter_by(id=pet_id).one()
 
     # throwing and error and redirecting if not authorized to change the pup
-    if pupToEdit.entered_by != login_session['user_id']:
+    '''if pupToEdit.entered_by != login_session['user_id']:
         flash('Not authorized to change a pup you did not enter in the system.')
         return render_template('pupshome.html', error = 'true')
     current_shelter = shelterQuery.filter_by(id=pupToEdit.shelter_id).one()
-   
-    # get any shelters with space available from vacantShelter. 
-    vac_shelters = vacantShelter()
     
     if request.method == 'POST':
         if request.form['name'] != pupToEdit.name:
@@ -503,9 +511,8 @@ def pupsEdit(pup_id):
         flash('Changes made!')
         session.add(pupToEdit)
         session.commit()
-        return render_template('pupshome.html', notice='true')
-    return render_template('pupsedit.html', pup_id = pup_id, pup = pupToEdit,
-        vac_shelters=vac_shelters, current_shelter = current_shelter)
+        return render_template('pupshome.html', notice='true')'''
+    return render_template('pet_edit.html',  pet = petToEdit, pet_status=pet_status)
 
 @app.route('/pups/delete/<int:pup_id>/', methods=['GET', 'POST'])
 @logInDecorator

@@ -3,7 +3,7 @@
 
 
 {% block container %}
-<h1>Posting a {{status}} pet</h1>
+<h1>You are posting {%if pet_status == 'on_the_run' %} as On the Run {%else %} a pet as {{pet_status.capitalize()}} {%endif %} </h1>
 <div class="container ">
 	<div class="jumbotron">
 		<div class="input-group">
@@ -28,14 +28,17 @@
 		</div>
 		<hr class="my-2">
 		<div class="input-group">
+		  <textarea type="" class="form-control form-control-lg" placeholder="Description" aria-describedby="basic-addon1"></textarea>
+		</div>
+		<p>Include any details about this {{status}} pet that will help {% if status == 'lost' %} get your pet back home {% else %} get it back home. {% endif %} </p>
+		<hr class="my-2">
+		<div class="input-group">
 		  <input type="text" class="form-control form-control-lg" placeholder="Address" aria-describedby="basic-addon1">
 		</div>
 		<div class="input-group">
 		  <input type="text" class="form-control form-control-lg" placeholder="Zip Code" aria-describedby="basic-addon1">
 		</div>
-		<div class="input-group">
-		  <textarea type="" class="form-control form-control-lg" placeholder="Description" aria-describedby="basic-addon1"></textarea>
-		</div>
+		<p>Include the address or zipcode where the pet was {%if pet_status =='on_the_run' %} spoted.{%else%} {{pet_status}}.{%endif %}</p>
 		<hr class="my-2">
 		<div class="form-group">
 		    <label for="exampleInputFile">Picture</label>
@@ -43,17 +46,19 @@
 		    <p class="help-block">All images must follow our page rules</p>
 		 </div>
 		<hr class="my-2">
-		<div class="well well-lg">
+		<!--<div class="well well-lg">
 			<h1 class="display-4">Run an Ad on it!</h1>
 			<div class="checkbox">
 			    <label>
-			      <input type="checkbox"> Reach people that live five miles from where this pet was {{status}} and any friends that they have have in that area. 
+			      <input type="checkbox"> By running an Ad you can reach people that live five miles from where this pet was {{status}}. Running an Ad will makes this post come up as 'Sponsored' on the news feeds of the friends of our followers and followers if they are within the designated target area.
 			    </label>
   			</div>
-		</div>
-	</div>		
+		</div> -->
+	<a type="button" class="btn btn-primary btn-lg btn-block" href="{{url_for('confirmed', pet_status=pet_status)}}">Post to the Page<a>	
+	</div>
+	
 </div>
-	<button type="button" class="btn btn-primary btn-lg btn-block">Post to the Page</button>
+	
 </div>
 
 {% endblock %}

@@ -1,0 +1,57 @@
+{% extends "main.html" %}
+{% block title %}Edit{% endblock %}
+
+
+{%set page = "edit" %}
+
+ {% block container %}
+<div class="container">
+  <h5>You are editing your post.</h5>
+  <br>
+  <div class="container ">
+    <div class="jumbotron">
+     
+      <div class="input-group">
+        <input type="text" class="form-control form-control-lg" placeholder="{{pet.name}}" aria-describedby="basic-addon1">
+      </div>
+       <p>Name</p>
+        <div class="input-group">
+        <input type="text" class="form-control form-control-lg" placeholder="{{pet.animal_type}}" aria-describedby="basic-addon1">
+      </div>
+      <p>Pet Type</p>
+        <div class="input-group">
+        <input type="text" class="form-control form-control-lg" placeholder="{{pet.breed}}" aria-describedby="basic-addon1">
+      </div>
+      <p>Pet Breed</p>
+      <div class="input-group">
+        <input type="text" class="form-control form-control-lg" placeholder="{{pet.zipcode}}" aria-describedby="basic-addon1">
+      </div>
+      <p>Zipcode</p>
+      <div class="input-group">
+        <input type="text" class="form-control form-control-lg" placeholder="{{pet.gender}}" aria-describedby="basic-addon1">
+      </div>
+      <p>Gender</p>
+      <hr class="my-2">
+      <div class="form-group">
+        <label for="exampleInputFile">Picture</label>
+        <input type="file" id="exampleInputFile">
+        <p class="help-block">All images must follow our page rules</p>
+     </div>
+      <hr class="my-2">
+      <div class="input-group">
+        <textarea type="" class="form-control form-control-lg" placeholder="{{pet.description}}" aria-describedby="basic-addon1"></textarea>
+      </div>
+      <p>Description</p>
+     <form action = "{{url_for('confirmed', pet_status=pet_status )}}" >
+      <button type='submit' class="btn btn-primary " role="button">Update</button>
+      <button onclick="goBack()" class="btn btn-primary" role="button" name='back'> <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Go Back (Cancel) </button>
+       </form>
+    </div>
+  </div>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
+  {% endblock %}

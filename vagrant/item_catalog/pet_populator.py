@@ -59,7 +59,7 @@ cat_pictures =[
 "https://scontent-dft4-1.xx.fbcdn.net/v/t1.0-0/p200x200/14095748_628659863973986_8615838207538585033_n.jpg?oh=3d092b2582217494f6a79604ff652619&oe=58C82539"
 ]
 
-zipcodes = [
+address = [
 		"79936", "79912", "79924", "79927", "88008",
 		"79932", "79934", "79849", "79835", "79908", 
 		"79916", "79821", "79928"]
@@ -101,7 +101,7 @@ def create_random_email():
 # adds the male pups
 male_pets_added = 0	
 for i, x in enumerate(male_names):
-	new_user = User(name=create_random_user(), email=create_random_email())
+	new_user = User(name=create_random_user(), email=create_random_email(), picture="#")
 	session.add(new_user)
 	session.commit()
 
@@ -115,15 +115,13 @@ for i, x in enumerate(male_names):
 			gender = "male",
 			name = x,
 			picture = random.choice(dog_pictures),
-			zipcode= random.choice(zipcodes))
+			address= random.choice(address))
 		session.add(new_pet)
 		session.commit()
 		last_pet = session.query(Pet).order_by(Pet.id.desc()).first()
 		if random.choice(current_status).lower() == "lost":
 			status = Status(
-				is_lost = True,
-				is_found = False,
-				on_the_run = False,
+				pet_status = 'Lost',
 				pet_id = last_pet.id,
 				entered_by =last_user.id
 				)
@@ -131,9 +129,7 @@ for i, x in enumerate(male_names):
 			session.commit()
 		if random.choice(current_status).lower() == "found":
 			status = Status(
-				is_lost = False,
-				is_found = True,
-				on_the_run = False,
+				pet_status = 'Found',
 				pet_id = last_pet.id,
 				entered_by =last_user.id
 				)
@@ -141,9 +137,7 @@ for i, x in enumerate(male_names):
 			session.commit()
 		if random.choice(current_status).lower() == "run":
 			status = Status(
-				is_lost = False,
-				is_found = False,
-				on_the_run = True,
+				pet_status = 'On the Run!',
 				pet_id = last_pet.id,
 				entered_by =last_user.id
 				)
@@ -157,15 +151,13 @@ for i, x in enumerate(male_names):
 			description= description, gender = "male",
 			name = x,
 			picture = random.choice(cat_pictures),
-			zipcode= random.choice(zipcodes))
+			address= random.choice(address))
 		session.add(new_pet)
 		session.commit()
 		last_pet = session.query(Pet).order_by(Pet.id.desc()).first()
 		if random.choice(current_status).lower() == "lost":
 			status = Status(
-				is_lost = True,
-				is_found = False,
-				on_the_run = False,
+				pet_status = 'Lost',
 				pet_id = last_pet.id,
 				entered_by =last_user.id
 				)
@@ -173,9 +165,7 @@ for i, x in enumerate(male_names):
 			session.commit()
 		if random.choice(current_status).lower() == "found":
 			status = Status(
-				is_lost = False,
-				is_found = True,
-				on_the_run = False,
+				pet_status = 'Found',
 				pet_id = last_pet.id,
 				entered_by =last_user.id
 				)
@@ -183,9 +173,7 @@ for i, x in enumerate(male_names):
 			session.commit()
 		if random.choice(current_status).lower() == "on_the_run":
 			status = Status(
-				is_lost = False,
-				is_found = False,
-				on_the_run = True,
+				pet_status = 'On the Run',
 				pet_id = last_pet.id,
 				entered_by =last_user.id
 				)
@@ -193,9 +181,90 @@ for i, x in enumerate(male_names):
 			session.commit()
 		male_pets_added = 1 + male_pets_added
 
+female_pets_added = 0	
+for i, x in enumerate(female_names):
+	new_user = User(name=create_random_user(), email=create_random_email(), picture="#")
+	session.add(new_user)
+	session.commit()
 
+	last_user = session.query(User).order_by(User.id).first()
+	random_choice = random.choice(animal_types).lower()
+
+	if random_choice == "dog":
+		new_pet = Pet(
+			animal_type = random_choice,
+			description= description,
+			gender = "female",
+			name = x,
+			picture = random.choice(dog_pictures),
+			address= random.choice(address))
+		session.add(new_pet)
+		session.commit()
+		last_pet = session.query(Pet).order_by(Pet.id.desc()).first()
+		if random.choice(current_status).lower() == "lost":
+			status = Status(
+				pet_status = 'Lost',
+				pet_id = last_pet.id,
+				entered_by =last_user.id
+				)
+			session.add(status)
+			session.commit()
+		if random.choice(current_status).lower() == "found":
+			status = Status(
+				pet_status = 'Found',
+				pet_id = last_pet.id,
+				entered_by =last_user.id
+				)
+			session.add(status)
+			session.commit()
+		if random.choice(current_status).lower() == "run":
+			status = Status(
+				pet_status = 'On the Run!',
+				pet_id = last_pet.id,
+				entered_by =last_user.id
+				)
+			session.add(status)
+			session.commit()
+
+	random_choice = random.choice(animal_types).lower()
+	if random_choice == "cat":
+		new_pet = Pet(
+			animal_type = random_choice,
+			description= description, gender = "female",
+			name = x,
+			picture = random.choice(cat_pictures),
+			address= random.choice(address))
+		session.add(new_pet)
+		session.commit()
+		last_pet = session.query(Pet).order_by(Pet.id.desc()).first()
+		if random.choice(current_status).lower() == "lost":
+			status = Status(
+				pet_status = 'Lost',
+				pet_id = last_pet.id,
+				entered_by =last_user.id
+				)
+			session.add(status)
+			session.commit()
+		if random.choice(current_status).lower() == "found":
+			status = Status(
+				pet_status = 'Found',
+				pet_id = last_pet.id,
+				entered_by =last_user.id
+				)
+			session.add(status)
+			session.commit()
+		if random.choice(current_status).lower() == "on_the_run":
+			status = Status(
+				pet_status = 'On the Run',
+				pet_id = last_pet.id,
+				entered_by =last_user.id
+				)
+			session.add(status)
+			session.commit()
+		female_pets_added = 1 + female_pets_added
 
 pets =  male_pets_added
 
 print 'male Pets Added: ' + str(male_pets_added)
-print 'Pets Added : ' + str(pets)
+print 'femail Pets Added' + str(female_pets_added)
+print 'total pets Added : ' + str(pets)

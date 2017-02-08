@@ -1,14 +1,38 @@
 {% extends "main.html" %}
 {% block title %}Pups Adopt{% endblock %}
-<!--Page main -->
-{% set page_id = "post" %}
+
+ {% block container %}
 
 
-{% block container %}
 <div class="container">
-	<a class="btn btn-outline-success" href='{{url_for('post', area=area, status=status)}}'>Post to Page</a>
+	<hr>
+	<a type="button" class="btn btn-outline-primary btn-lg btn-block" href='{{url_for('post', pet_status=pet_status)}}'>Post to Page</a>
+	<hr>
 	<div class="row">
-  		<div class="col-md-6">{{status}} {{area}}</div>
+	{% for pet in pets %}
+		<div class="card card-outline-primary col-sm-6 col-md-4">
+			<div class="thumbnail">
+				<img class="card-img-top img-responsive" src="{{pet.picture}}" alt="Card image cap">
+				  <div class="card-block">
+				    <h4 class="card-title">{{pet.name}}</h4>
+					   <p class="card-text">{{pet.description}}</p>
+					  <ul class="list-group list-group-flush">
+					    <li class="list-group-item"><bold>Animal Type: </bold>{{pet.animal_type}}</li>
+					    <li class="list-group-item"><bold>Breed: </bold>{{pet.breed}}</li>
+					    <li class="list-group-item"><bold>Gender: </bold>{{pet.gender}}</li>
+					    <li class="list-group-item"><bold>Zip Code: </bold>{{pet.address}}</li>
+					    {% for stat in status %}
+					    <li class="list-group-item"><bold>Status: </bold>{{stat.status}}</li>
+					    {% endfor %}
+					  </ul>
+					</div>
+				  <div class="card-block">
+				    <a href="{{url_for('pet_edit', pet_id=pet.id, pet_status=pet_status)}}" class="card-link">Update</a>
+				    <a href="#" class="btn btn-primary">Is Back Home!</a>
+				</div>
+		  </div>
+		</div>
+	{% endfor %}
 	</div>
 
 </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 
   <head>
-
+{% block head %}
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,7 +10,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-    {% block head %}
+    
     
     {% endblock %}
       
@@ -36,7 +36,7 @@
               <a class="nav-link" href='{{url_for('status', area="all", status="found")}}'>Found</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href='{{url_for('status', area="all", status="on")}}'>On the Run!</a>
+              <a class="nav-link" href='{{url_for('status', area="all", status="on_the_run")}}'>On the Run!</a>
             </li>
           </ul>
           <form class="form-inline float-xs-right">
@@ -48,7 +48,7 @@
       {% block container %}
 
       {% endblock %}
-      <footer class="footer mx-auto">
+      <footer class="footer ">
         <div class="container">
           <a class="text-muted" href="http://facebook.com/lostandfoundpetsinelpaso">Lost and Found Pets in | El Paso</a>
         </div>

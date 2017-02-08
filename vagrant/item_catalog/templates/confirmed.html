@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+{% block title %}Pups Adopt{% endblock %}
+
+
+<!--Page identifier-->
+{%set page = "confirmation" %}
+
+{% block container %}
+<div class="container ">
+	<h1>This confirms that you posted a pet {%if pet_status == 'on_the_run' %} as On the Run {%else %} as {{pet_status.capitalize()}} {%endif %}</h1>
+
+</div>
+{%endblock %}
