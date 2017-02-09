@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>This menu belongs to {{restaurant.name}}</h1>
+<form action="{{ url_for('newMenuItem', restaurant_id = restaurant_id)}}">
+  <div class="form-group">
+    <label for="formGroupExampleInput">Name</label>
+    <input type="text" class="form-control" id="formGroupExampleInput" name = 'name' placeholder="Example input">
+  </div>
+  
+  <div class="form-group">
+    <label for="formGroupExampleInput2">Another label</label>
+    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+  </div>
+</form>
+   	
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

@@ -33,8 +33,13 @@ def editMenuItem(menu_id, restaurant_id):
 def deleteMenuItem(menu_id, restaurant_id):
     '''This method renders the home template'''
 
-
     return render_template('delete.html', menu_id=menu_id, restaurant_id=restaurant_id)
+
+@app.route('/restaurants.in/<int:restaurant_id>/new', methods=['POST', 'GET'])
+def newMenuItem(restaurant_id):
+    '''This method renders the home template'''
+
+    return render_template('new_item.html', restaurant_id=restaurant_id)
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
