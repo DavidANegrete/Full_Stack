@@ -56,7 +56,7 @@ def logInDecorator(f):
 # Create anti-forgery state token
 @app.route('/login')
 def showLogin():
-    ''' this method creates a state variable that will be 32 characters logging
+    ''' This method creates a state variable that will be 32 characters logging
     Andy mix of upper case letters and digits. This method protects from cross site 
     attack anti-forgery'''
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -247,7 +247,7 @@ def disconnect():
         return redirect(url_for('home', control_notice='true'))
     else:
         flash("You were not logged in")
-        return redirect(url_for('home', control_notice=notice, error='true'))
+        return redirect(url_for('home', control_notice='false', error='true'))
 
 # DISCONNECTING  - Revoking the current user's token and reset the login_session
 @app.route('/gdisconnect')

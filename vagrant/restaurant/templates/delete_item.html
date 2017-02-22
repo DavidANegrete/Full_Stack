@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<form actiom="{{url_for('deleteMenuItem', menu_id = item.id)}}" method="POST">
+	<div class="form-group">
+    	<label for="formGroupExampleInput">You are about to delete the item below. Are you sure you want it gone?</label>
+    	
+  	</div>
+	<button type="submit" class="btn btn-block btn-primary">Yes</button>
+	<button type="button" class="btn btn-secondary btn-block btn-outline-danger" onclick="goBack()">No (Go Back)</button>
+</form>
+	
+</div>
+<div class="row">
+		<div class="col-sm-12">
+			<div class="card">
+				<div class="card-block">
+				    <h4 class="card-title">{{item.name}}</h4>
+				    <p class="card-text">{{item.description}}</p>
+				  </div>
+				  <ul class="list-group list-group-flush">
+				    <li class="list-group-item">Course: {{item.course}}</li>
+				    <li class="list-group-item">Price: {{item.price}}</li>
+				  </ul>
+			</div>
+		</div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function goBack() {
+    window.history.back();
+}
+{% endblock %}

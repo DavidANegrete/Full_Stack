@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>Edit this Restaurant</h1>
+<form actiom="{{url_for('editRestaurant', restaurant_id = restaurant_id)}}" method="POST">
+  <div class="form-group">
+    <label for="formGroupExampleInput">Name</label>
+    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="{{restaurant.name}}" name='name'>
+  </div>
+    
+	<button type="submit" class="btn btn-block btn-primary">Submit</button>
+	<button type="button" class="btn btn-secondary btn-block btn-outline-danger" onclick="goBack()">Go Back</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
+{% endblock %}

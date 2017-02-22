@@ -6,29 +6,41 @@
 {% block body %}
 
 <h1>Edit</h1>
-<form>
+<form actiom="{{url_for('editMenuItem', restaurant_id = restaurant_id, menu_id=item.id)}}" method="POST">
   <div class="form-group">
     <label for="formGroupExampleInput">Item Name</label>
-    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="{{item.name}}">
+    <input type="text" class="form-control" id="formGroupExampleInput" value="{{item.name}}" name='name'>
   </div>
     <div class="form-group">
     <label for="exampleSelect1">Course</label>
-    <select class="form-control" id="exampleSelect1">
-	      <option value ="breakfast" >Breakfast</option>
-	      <option value="lunch" >Lunch</option>
-	      <option value="dinner">Dinner</option>
+    <select class="form-control" id="exampleSelect1" name="course">
+      {% if item.course == 'breakfast' %}
+	      <option value ="breakfast" selected name='course'>Breakfast</option>
+	      <option value="lunch"  name='course'>Lunch</option>
+	      <option value="dinner" name='course'>Dinner</option>
+      {% elif  item.course == 'lunch' %}
+        <option value ="breakfast"  name='course'>Breakfast</option>
+        <option value="lunch"  name='course' selected>Lunch</option>
+        <option value="dinner" name='course'>Dinner</option>
+      {% else %}
+        <option value ="breakfast"  name='course'>Breakfast</option>
+        <option value="lunch"  name='course'>Lunch</option>
+        <option value="dinner"  name='course' selected>Dinner</option>
+      {% endif %}
     </select>
   </div>
   <div class="form-group">
     <label for="formGroupExampleInput2">Price</label>
-    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="{{item.price}}">
+    <input type="text" class="form-control" id="formGroupExampleInput2" value="{{item.price}}" name='price'>
   </div>
-</form>
   <div class="form-group">
     <label for="exampleTextarea">Description</label>
-    <textarea class="form-control" id="exampleTextarea" rows="3" placeholder="{{item.description}}"></textarea>
+    <textarea class="form-control" id="exampleTextarea" rows="3" value="{{item.description}}" placeholder="{{item.description}}" name='description'></textarea>
   </div>
-	<button type="submit" class="btn btn-primary">Submit</button>
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+	
 {% endblock %}
 
 {% block scripts %}

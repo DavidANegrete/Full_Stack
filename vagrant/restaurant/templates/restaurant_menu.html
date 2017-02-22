@@ -1,0 +1,109 @@
+{% extends "main.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<!--MESSAGE FLASHING EXAMPLE -->
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<div class="alert alert-success" role="alert">
+			{% for message in messages %}
+				<strong>{{message}}</strong>
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endwith %}
+
+<div class="container">
+	<a href="{{url_for('newMenuItem', restaurant_id = restaurant.id )}}">Add a new Item!</a>
+	<div class="jumbotron">
+		<h1 class="display-3">{{restaurant.name}}</h1>
+		<p>Here is the restaurants menu</p>
+	</div>
+	
+</div>
+{% if items !=[] %}
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<h2>Appetizers</h2>
+			{% for item in items %}
+				{% if item.course == 'Appetizer' %}
+					<div class="card-block">
+					    <h4 class="card-title">{{item.name}}</h4>
+					    <p class="card-text">{{item.description}}</p>			    
+						<p class="card-text">Course: {{item.course}}</p>
+						<p class="card-text">Price: {{item.price}}</p>
+					  </div>
+					  <div class="card-block">
+					  	<a class="card-link" href='{{url_for('editMenuItem', restaurant_id = item.restaurant_id, menu_id = item.id) }}'>Edit</a>
+			   		<a class="card-link" href = '{{url_for('deleteMenuItem', restaurant_id = item.restaurant_id, menu_id = item.id ) }}'>Delete</a>
+					  </div> 
+				{% endif %}		
+			{% endfor %}
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<h2>Entrees</h2>
+			{% for item in items %}
+				{% if item.course == 'Entree' %}
+					<div class="card-block">
+					    <h4 class="card-title">{{item.name}}</h4>
+					    <p class="card-text">{{item.description}}</p>			    
+						<p class="card-text">Course: {{item.course}}</p>
+						<p class="card-text">Price: {{item.price}}</p>
+					  </div>
+					  <div class="card-block">
+					  	<a class="card-link" href='{{url_for('editMenuItem', restaurant_id = item.restaurant_id, menu_id = item.id) }}'>Edit</a>
+			   		<a class="card-link" href = '{{url_for('deleteMenuItem', restaurant_id = item.restaurant_id, menu_id = item.id ) }}'>Delete</a>
+					  </div> 
+				{% endif %}		
+			{% endfor %}
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<h2>Deserts</h2>
+			{% for item in items %}
+				{% if item.course == 'Deserts' %}
+					<div class="card-block">
+					    <h4 class="card-title">{{item.name}}</h4>
+					    <p class="card-text">{{item.description}}</p>			    
+						<p class="card-text">Course: {{item.course}}</p>
+						<p class="card-text">Price: {{item.price}}</p>
+					  </div>
+					  <div class="card-block">
+					  	<a class="card-link" href='{{url_for('editMenuItem', restaurant_id = item.restaurant_id, menu_id = item.id) }}'>Edit</a>
+			   		<a class="card-link" href = '{{url_for('deleteMenuItem', restaurant_id = item.restaurant_id, menu_id = item.id ) }}'>Delete</a>
+					  </div> 
+				{% endif %}		
+			{% endfor %}
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<h2>Beverages</h2>
+			{% for item in items %}
+				{% if item.course == 'Beverage' %}
+					<div class="card-block">
+					    <h4 class="card-title">{{item.name}}</h4>
+					    <p class="card-text">{{item.description}}</p>			    
+						<p class="card-text">Course: {{item.course}}</p>
+						<p class="card-text">Price: {{item.price}}</p>
+					  </div>
+					  <div class="card-block">
+					  	<a class="card-link" href='{{url_for('editMenuItem', restaurant_id = item.restaurant_id, menu_id = item.id) }}'>Edit</a>
+			   		<a class="card-link" href = '{{url_for('deleteMenuItem', restaurant_id = item.restaurant_id, menu_id = item.id ) }}'>Delete</a>
+					  </div> 
+				{% endif %}		
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>You are about to delete {{restaurant.name}}</h1>
+<form actiom="{{url_for('deleteRestaurant', restaurant_id = restaurant.id)}}" method="POST">
+	<div class="form-group">
+    	<label for="formGroupExampleInput">Enter the Name (exactly) to delete and submit</label>
+    	<input type="text" class="form-control" id="formGroupExampleInput" name='name'>
+  	</div>
+	<button type="submit" class="btn btn-block btn-primary">Submit</button>
+	<button type="button" class="btn btn-secondary btn-block btn-outline-danger" onclick="goBack()">Go Back</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
+{% endblock %}

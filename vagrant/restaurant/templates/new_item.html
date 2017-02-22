@@ -4,21 +4,40 @@
 {% endblock %}
 
 {% block body %}
-<h1>This menu belongs to {{restaurant.name}}</h1>
-<form action="{{ url_for('newMenuItem', restaurant_id = restaurant_id)}}">
+<h1>Create a new menu item for {{restaurant.name}}</h1>
+<form action="{{ url_for('newMenuItem', restaurant_id = restaurant_id)}}" method='post'>
   <div class="form-group">
     <label for="formGroupExampleInput">Name</label>
-    <input type="text" class="form-control" id="formGroupExampleInput" name = 'name' placeholder="Example input">
+    <input type="text" class="form-control" id="formGroupExampleInput" name = 'name' placeholder="Give it a koo name!">
   </div>
-  
   <div class="form-group">
-    <label for="formGroupExampleInput2">Another label</label>
-    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+    <label for="exampleTextarea">What is it?</label>
+    <textarea class="form-control" id="exampleTextarea" rows="3" placeholder="Explain how it tastes and why people want to eat it!" name='description'></textarea>
   </div>
+  <div class="form-group">
+    <label for="exampleSelect2">What type of course is this ?</label>
+    <select multiple class="form-control" id="exampleSelect2" name="course">
+      <option value='Entree' name="course">Entree</option>
+      <option value='Appetizer' name="course">Appetizer</option>
+      <option value='Beverage' name="course">Beverages</option>
+      <option value='Desert' name="course">Desert</option>
+    </select>
+  </div>
+  <div class="form-group row">
+  <label for="example-number-input" class="col-2 col-form-label">$</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="2.50" id="example-number-input" name='price'>
+  </div>
+</div>
+  <button type="submit" class="btn btn-primary btn-lg btn-block btn-outline-primary">Add it on yum now</button>
+  <button type="button" class="btn btn-secondary btn-lg btn-block btn-outline-danger" onclick="goBack()">Go Back</button>
 </form>
-   	
-
 {% endblock %}
 
 {% block scripts %}
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
 {% endblock %}
