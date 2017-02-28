@@ -1,114 +1,51 @@
 {% extends "main.html" %}
 
-{% block head %}
-{% endblock %}
+
 
 {% block body %}
-<div id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="card">
-    <div class="card-header" role="tab" id="headingOne">
-      <h5 class="mb-0">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          What we are about
-        </a>
-      </h5>
-    </div>
-    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <h1 class="display-3">Nail art the way you want it!</h1>
-          <p class="lead">We are a not your average "nail salon" we are a nail art studio. 
-            Our artists specialize in creating unique works of art for each guest.</p>
+<div class="container">
+  <nav class="navbar navbar-light navbar-toggleable-md bd-navbar">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand " href="">D'Licious Nails</a>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-item nav-link nav-names" href="#">About<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-item nav-link nav-names" href="#">Contact Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-item nav-link nav-names" href="#">Appointments</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle nav-item" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Book Now!</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown01">
+                <a class="dropdown-item" href="#">Darma (Advanced Artist)</a></a>
+                <a class="dropdown-item" href="#">Darinka (Nail Artist)</a>
+                <a class="dropdown-item" href="#">Alex (Pedicure Service)</a>
+              </div>
+            </li>
+          </ul>
         </div>
-        <hr>
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-6">
-              <h4 class="card-title ">Nail Art Pricing</h4>
-              <p class="card-text ">
-                  Like many other artist do, we set the price for a piece of art according to the time, effort and skill needed to complete it. Skill varies from artist to artist and so do our hourly rates. There are five different artist types representing our studio, from the very advanced Master Artist Educator to Junior Nail Artists that are starting their nail art career. One thing remains consistent with all artist at our studio and that is their desire to get better at their craft.</p>
-            </div>
-          <div class="col-sm-6">
-              <h4 class="card-title">Types of Artists</h4>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">Junior Nail Artist</li>
-                  <li class="list-group-item">Nail Artist</li>
-                  <li class="list-group-item">Advanced Nail Artist</li>
-                  <li class="list-group-item">Master Nail Artist</li>
-                <li class="list-group-item">Master Artist Educator</li>
-                </ul>
-          </div>
-    </div>
+  </nav>
+</div>
+ <!-- /.container -->
+ <div class="jumbotron jumbotron-fluid">
+  <div class="container" >
 
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" role="tab" id="headingTwo">
-      <h5 class="mb-0">
-        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Get in contact with us
-        </a>
-      </h5>
-    </div>
-    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-6">
-            <p>We are waiting to hear from you about anything nail art related. </p>
-                <h5 class="card-title">By email</h5>
-                  <p class="card-text">Owner/Advanced Nail Artist:<br> <a href="mail">Undarmaa "Darma" Baasandorj</a></p>
-                  <p class="card-text">Nail Artist:<br><a href="mail"> Darinka Poggio</a></p>
-                  <p class="card-text">Technical Issues with the page:<br> <a href="mail">David Negrete</a></p>
-          </div>
-          <div class="col-sm-6">
-            <p>We are located inside of Milan Salon and Day Spa. Just follow the glitter to find us.</p>
-            <div id="map" style="width:100%;height:300px">
-
-            </div>
-            
-            </div>
-          </div>
-      </div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" role="tab" id="headingThree">
-      <h5 class="mb-0">
-        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Collapsible Group Item #3
-        </a>
-      </h5>
-    </div>
-    <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="card-block">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
+    <h1 class="display-3">Fluid jumbotron</h1>
+    <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+    <img class="img-responsive " src="/static/images/logo.svg">
+    <img class="img-responsive main-image" src="/static/images/front_door_DLiciousNails.jpg">
   </div>
 </div>
 
 
 
-{% block scripts %}
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoQVCY5TWE4LORj40IFxfsNgTxMOn3Hxw&callback=myMap"
-  type="text/javascript"></script>
-<script>
-function myMap() {
-  var mapCanvas = document.getElementById("map");
-  var myCenter = new google.maps.LatLng(31.771540, -106.330580); 
-  var mapOptions = {center: myCenter, zoom: 15};
-  var map = new google.maps.Map(mapCanvas,mapOptions);
-  var marker = new google.maps.Marker({
-    position: myCenter,
-    animation: google.maps.Animation.BOUNCE
-  });
-  marker.setMap(map);
-}
-</script>
+{% endblock %}
 
-{% endblock %}
-{% endblock %}
 
 
