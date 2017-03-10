@@ -1,48 +1,261 @@
 {% extends "main.html" %}
-
-
-
 {% block body %}
-<div class="container">
-  <nav class="navbar navbar-light navbar-toggleable-md bd-navbar">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand " href="">D'Licious Nails</a>
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-item nav-link nav-names" href="#">About<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-item nav-link nav-names" href="#">Contact Us</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-item nav-link nav-names" href="#">Appointments</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle nav-item" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Book Now!</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown01">
-                <a class="dropdown-item" href="#">Darma (Advanced Artist)</a></a>
-                <a class="dropdown-item" href="#">Darinka (Nail Artist)</a>
-                <a class="dropdown-item" href="#">Alex (Pedicure Service)</a>
-              </div>
-            </li>
-          </ul>
-        </div>
+<nav class="navbar navbar-toggleable-md navbar-light fixed-top">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" id="brand"href="#" ><span class="brand-name">D'Licous Nails</span> | <span class="small"> Nail Art Studio</span></a>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault" >
+      <ul class="navbar-nav " id="nav">
+        <li class="nav-item active" >
+          <a class="nav-link nav-section" href="#about" >About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-section" href="#houseartist">House Artists</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-section" href="#appointments">Appointments</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-section" href="#contact">Contact</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>Book Now</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="#">Darma (Advanced Artist)</a>
+            <a class="dropdown-item" href="#">Darinka (Nail Artist)</a>
+            <a class="dropdown-item" href="#">Alex (Pedicurist)</a>
+          </div>
+        </li>
+      </ul>
+    </div>
   </nav>
-</div>
- <!-- /.container -->
- <div class="jumbotron jumbotron-fluid">
-  <div class="container" >
+    
+    <!-- Header-->
+    
+    <div class="header" id="header">
+      <div class="container main-container">
+        <div class="row ">
+          <div class="col-lg-6 col-md-6 col-sm-6 main-text">
+            <h1 class="main-heading">Nail Art the way you want it!</h1>
+            <p class="lead main-paragraph">We are not your basic "nail salon" we are a nail art studio. 
+            Our artists specialize in creating unique works of art for each guest.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <h1 class="display-3">Fluid jumbotron</h1>
-    <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-    <img class="img-responsive " src="/static/images/logo.svg">
-    <img class="img-responsive main-image" src="/static/images/front_door_DLiciousNails.jpg">
+    <!-- EO Header-->
+
+    <!-- About-->
+    <div class="about" id="about">
+      <div class="container">
+        <h2>About our Nail Art Studio</h2>
+        <p class="about-paragraph">D'Licious Nails is about creating works of art every time you get your nails done. We offer everything you need to make your hands and feet look their best. All you have to do is to choose your artist and leave the rest up to us.</p>
+        <p class="about-paragraph about-paragraph-bottom">There are many in and out salons that don't deliver what their customers want. We take our time to figure out what it is that a client wants. We are a one of a kind nail art studio with the goal of exceeding our clients expectations every time. Below are the types of artist that you can find at our studio.</p>
+        <div class="row">
+          <div class="col-lg-4 col-md-4">
+            <h4>Advanced Nail Artist</h4>
+            <p class="about-services">Advanced Artists have gone the extra mile to perfect their skills. Our Advanced Artist have been doing nails for a minimum of 4 years, have at least 5 industry certifications that show their skill lever and must be able to demonstrate through their work that they can carry the badge of Advanced Artist at D'Licious Nails.   
+            </p>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <h4>Nail Artist</h4>
+            <p class="about-services">Our Nail Artists have been doing nails for a minimum of 3 years and carry at least 2 industry certifications that prove they have learned and worked on their craft. They too must also be able to show through their work that they can deliver stunning nail art.  
+            </p>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <h4>Pedicurist</h4>
+            <p class="about-services">A pedicurist at D'Licious Nails must have at least 1 year working in the industry and be able follow our guidelines for delivering the best pedicures ever. We hand pick our pedicurist to insure that they meet the high ideals of our nails art studio. 
+            </p>
+          </div>
+        </div>
+    </div>
   </div>
-</div>
 
+  <!-- EO About-->  
+
+  <!-- House Artist-->
+
+  <div class="houseartist" id="houseartist">
+    <div class="container">
+      <h2>House Artists</h2>
+      <p class="houseartist-main-text">We are happy to say that our artists come from all over the world. They are here to serve your needs here in amazing El Paso!</p>
+      <div class="row">
+        <div class="col-lg-4 col-md-4 artist-info">
+          <h3>Advanced Artist</h3>
+          <img src="/static/images/darma.jpg" class="artist-image rounded-circle text-justify">
+          <h4>Undarma Baasandorj</h4>
+          <p class="houseartist-text">Darma has been doing nails for over 8 years and is the founder of D'Licious Nails. She is a nail fanatic and fashionista. Her work has been shared and seen by millions on social media.</p>
+          <hr>
+          <p class="houseartist-text">Certifications: </p>
+            <ul class="list-group ">
+              <li class="certifications list-group-item"><span class="small">Crystal Nails Boot-camp, Advanced Gel and Nail Art</small></li> 
+              <li class="certifications list-group-item"><span class="small">Crystal Nails Boot-camp, Master level in Acrylics</small></li> 
+              <li class="certifications list-group-item"><span class="small">Masterworks, "Nail Bed Extension with Encasement Art" </small></li>
+              <li class="certifications list-group-item"><span class="small">The Art of Nails, Electric file course</small></li>
+              <li class="certifications list-group-item"><span class="small">IBX, IBX System Education Program</small><li>
+              <li class="certifications list-group-item"><span class="small">CND, CND Shellac Certification Course</small></li>
+              <li class="certifications list-group-item"><span class="small">Crystal Culture, Stylist Team Educator USA</small><li>
+            </ul>
+        </div>
+        <div class="col-lg-4 col-md-4 artist-info">
+          <h3>Nail Artist</h3>
+          <img src="/static/images/darinka.jpg" class="artist-image rounded-circle text-justify">
+          <h4>Darinka Poggio</h4>
+          <p class="houseartist-text">Darinka has a part of the nail industry for more than seven years. She has a passion and love for nail art and is able to adapt to the latest trends by always learning. She is focused on providing her customers with a great overall experience. She loves delivering what her customers wish to express with their nails.</p>
+          <p class="houseartist-text">Certifications: </p>
+            <ul class="list-group ">
+              <li class="certifications list-group-item"><span class="small">Organic Nails, Professional Application MX</small></li>
+              <li class="certifications list-group-item"><span class="small">Crystal Culture, Stylist </small><li>
+            </ul>
+        </div>
+        <div class="col-lg-4 col-md-4 artist-info">
+          <h3>Pedicurist</h3>
+          <img src="/static/images/alex.jpg" class="artist-image rounded-circle text-justify">
+          <h4>Alex Rosales</h4>
+          <p class="houseartist-text">Alex has been working doing nails for 2 years and during that time she loves the opportunity she gets to her clients look more beautiful. Loves to use her creativity to create new works of art and is eager to learn new techniques to apply them on her clients hands and feet.</p>
+          <p class="houseartist-text">Certifications: </p>
+            <ul class="list-group ">
+              <li class="certifications list-group-item"><span class="small"></small></li> 
+              <li class="certifications list-group-item"><span class="small"></small></li> 
+              <li class="certifications list-group-item"><span class="small"></small></li>
+              <li class="certifications list-group-item"><span class="small"></small></li>
+            </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EO House Artist-->
+
+  <!-- Appointments-->
+  <div class="apoointments" id="appintments">
+    <div class="container">
+        <h2>Appointments made easy</h2>
+        <p class="appointments-text">We make it easy for you to book and change an appointment with us. We know things can happen so we give you up to 24 hours before your appointment starts to change it.</p>
+        <p class="appointments-text">When you book with us you will receive an email notification confirming your appointment. We will also send you reminders because the last thing we want to happen is for you to miss it and get charged for not showing up. When you get reminders from us, that is a good time for you to think about what you are looking to get. We encourage you to save any images of nail art that you like and themes you want on your new set. Reach out to your artist with any questions or concerns, we want you to have a great experience with us.</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <h5 class="card-title">FAQ's</h5>
+            <p class="card-text">We want you to be happy with your nails and your overall experience with us. Here are some frequently asked questions from our customers, if you feel like your question is still unanswered reach out to us by <a href="mailto:david@dliciousnails.com">email</a> we will be happy to answer it for you.</p>
+            <div id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="card">
+                <div class="card-header" role="tab" id="headingOne">
+                  <h6 class="mb-0 question">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      How much time do I book for? 
+                    </a>
+                  </h6>
+                </div>
+
+                <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="card-block">
+                    A good rule of thumb when booking is to compare some our previous work with the one you are aiming to get done. Look on our social media accounts and you will find the amount of time and the name of the artist that did the work on each post #hashTagged on the comments. If it is still unclear to you, feel free email the artist or <a href="https://www.facebook.com/EPNailArtStudio/messages/">message us</a>. Come appointment time we want for you to get the work you expect to get done and nothing less.   
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="headingTwo">
+                  <h6 class="mb-0 question">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      How much more time should I add to get the work I have now removed?
+                    </a>
+                  </h6>
+                </div>
+                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="card-block">
+                   If you have work on your nails come appointment time, it will add no less than 30 minutes to your appointment. Some ladies will try to remove their existing nails themselves because they want to save time to get more work done but that is not always the best move. If it is not done with care a do it yourself removal can cause damage on the nail bed. <bold>If the bed is damaged we will not be able to work on your nails.</bold> A better option is to get them removed professionally at a nail salon and come in with a blank slate. 
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="headingThree">
+                  <h6 class="mb-0 question">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      How can I make an appointment?
+                    </a>
+                  </h6>
+                </div>
+                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                  <div class="card-block">
+                    Booking an appointment is easy and all that you need is a credit card to secure your appointment and an email address where we can send notifications to. You will review a confirmation email from us that will give you the option to change, cancel or reschedule your appointment as long as it is 24 hours prior to your appointment time. If you miss it you will get charged a 30 dollar cancellation fee on the card you provide us.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+                <div class="card-header" role="tab" id="headingFour">
+                  <h6 class="mb-0 question">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                      Do you accept walk-ins?
+                    </a>
+                  </h6>
+                </div>
+                <div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+                  <div class="card-block">
+                    We sure do and the booking is done the same way you would book for an appointment that is a few weeks ahead. The only difference is that an appointment booked on the same day does not give the option to cancel or change it, since the appointment would be starting in less than 24 hours.  
+                  </div>
+                </div>
+              </div>
+            <div class="card">
+              <div class="card-header" role="tab" id="headingFive">
+                <h6 class="mb-0 question">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    How much is a new set?
+                  </a>
+                </h6>
+              </div>
+              <div id="collapseFive" class="collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="card-block">
+                 We charge by the hour either 60 or 40 depending on the artist that will do the work. A set can take longer if you want intricate art work. It is best to determine what you are looking for and compare that to our previous work to get a good estimate of how long it will take.
+                </div>
+              </div>
+            </div>     
+            <div class="card">
+              <div class="card-header" role="tab" id="headingSix">
+                <h6 class="mb-0 question">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseSix">
+                    I'm a nail bitter and would like pretty nails, can you do them for me?
+                  </a>
+                </h6>
+              </div>
+              <div id="collapseSix" class="collapse" role="tabpanel" aria-labelledby="headingSix">
+                <div class="card-block">
+                 We have been able to help ladies that want to beautify their nails even after having bit them off. The amount of time needed may very depending on the damage. For this type of situation it is best contact us, we will need a picture of your nails as they are now so we can determine how long it will take and if we can do the work for you.
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" role="tab" id="headingSix">
+                <h6 class="mb-0 question">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseSix">
+                    When are you available?
+                  </a>
+                </h6>
+              </div>
+              <div id="collapseSix" class="collapse" role="tabpanel" aria-labelledby="headingSix">
+                <div class="card-block">
+                 Our availability is available for all to see and varies by artist, it can be found by going through the process of booking an appointment. When picking the time, you will be shown the slots available for that selected time by day. 
+                </div>
+                </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+  </div>
+
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $("#navbar li a").click(function(event) {
+        // check if window is small enough so dropdown is created
+    $("#nav-collapse").removeClass("in").addClass("collapse");
+    });
+});</script>
 
 
 {% endblock %}

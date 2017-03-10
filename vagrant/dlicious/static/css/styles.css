@@ -1,0 +1,196 @@
+
+/*Default styles*/
+* {
+	
+	padding: 0;
+	margin: 0;
+}
+
+body{
+	
+	overflow-x: hidden;
+	font-family: 'Open Sans', sans-serif;
+	text-rendering: optimizeLeginility !important;
+	-webkit-font-smoothing:antialiaser !important;
+}
+
+li {
+	
+	list-style: none;
+	display: inline-block;
+}
+a{
+	
+	text-decoration: none;
+	transition: all 500ms ease-in-out;
+}
+
+a:hover,
+a:active {
+	
+	text-decoration: none;
+}
+h1,
+h2,
+h4{
+	
+	font-family: 'PT Sans Narrow', Arial, sans-serif;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+p{
+	
+	font-size: 15px;
+	line-height: 21px;
+}
+.btn{
+	
+	transition: all 300ms eas-in-out;
+	font-weight: 500 !important;
+	text-transform: uppercase;
+}
+.btn:hover{
+	
+	background-color: #ededed !important;
+	color: #3c3c3c !important;
+	border: 1px solid #fff !important;
+}
+/*Nav Bar styles*/
+.brand-name{
+	
+	font-family: 'Great Vibes', cursive;
+	text-transform: capitalize;
+	font-size: 30px;
+}
+.navbar{
+	
+	background-color: #eaebe6 !important;
+	text-transform: uppercase;
+	font-family: 'PT Sans Narrow', Arial, sans-serif;
+	font-weight: 700;
+}
+
+.navbar a {
+	
+	color: #111 !important;
+	opacity: 0.7;
+}
+
+.nav-section:hover{
+	
+	opacity: 1;
+	background-color: #ffffff !important;
+}
+#brand{
+	
+	max-width: 50%;
+}
+
+/*Header*/
+.main-container{
+	height: 600px;
+	width: 100%;
+	padding: 30px 30px;
+	margin-top: 50px;
+	background-image: url("/static/images/front_door.jpg");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: #2f2e2f;
+}
+.main-text {
+	padding-top: 150px;
+}
+
+/* About Section */
+.about{
+
+	padding: 75px 0 80px;
+	text-align: center;
+}
+.about h1,
+.about h4 {
+
+	color: #4c4c4c;
+	margin:20px 0 20px;
+}
+.about-paragraph{
+	
+	font-size: 16px;
+}
+
+/* HouseArtist Section */
+
+.houseartist{
+
+	background-color: #e4e5e2; 
+}
+
+.houseartist h2,
+.houseartist h4 {
+
+	color: #4c4c4c;
+	margin:20px 0 20px;
+}
+
+.houseartist{
+
+	padding: 75px 0 80px;
+	text-align: center;
+}
+
+.houseartist-main-text {
+	font-size: 20px;
+	padding-bottom: 40px;
+	text-align: center;
+	
+}
+
+.houseartist-text {
+	text-align: center;
+	font-size: 16px;
+
+}
+.certifications {
+	background-color: #e6e7e4;
+	max-width: 75%;
+	margin: auto;
+}
+.artist-info{
+	padding-top: 20px;
+}
+
+
+
+
+/* Media query */
+
+@media(max-width: 480px){
+	
+	.main-heading {
+		text-shadow: 1px 3px #f5f6f0;
+		width: 65%;
+	}
+
+	.main-paragraph{
+		text-shadow: 1px 1px 1px #898989;
+		width: 60%;
+	}
+
+}
+@media(max-width: 768px) and (min-width:480px){
+
+		.main-heading {
+		
+		text-shadow: 1px 3px #f5f6f0;
+		width: 85%;
+		}
+		
+		.main-paragraph{
+		
+		text-shadow: 1px 1px 1px #898989;
+		width: 60%;
+	}
+
+}
